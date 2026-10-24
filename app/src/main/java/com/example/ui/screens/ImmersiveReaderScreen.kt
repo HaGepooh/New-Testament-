@@ -1207,11 +1207,11 @@ private fun VerseRowItem(
                 // Main 3D Picture + 3 Mini 3D Variation Thumbnails (6 Distinct Characters per Verse!)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.width(96.dp)
+                    modifier = Modifier.width(112.dp)
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(width = 92.dp, height = 88.dp)
+                            .size(width = 108.dp, height = 102.dp)
                             .graphicsLayer {
                                 shadowElevation = 8f
                                 rotationY = if (verse.verseNumber % 2 == 0) -3.5f else 3.5f
@@ -1267,7 +1267,7 @@ private fun VerseRowItem(
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(26.dp)
+                                    .height(32.dp)
                                     .clip(RoundedCornerShape(6.dp))
                                     .border(
                                         width = if (isSelectedVar) 1.5.dp else 0.7.dp,
