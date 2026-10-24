@@ -131,62 +131,86 @@ fun IlluminatedBibleApp(viewModel: BibleViewModel) {
 
     DisposableEffect(context) {
         var engine: TextToSpeech? = null
-        engine = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                engine?.language = Locale.US
-                isTtsReady = true
-            }
-        }
-        engine.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {
-                val verseNum = utteranceId?.removePrefix("verse_")?.toIntOrNull()
-                viewModel.updateSpeechState(isSpeaking = true, verseNumber = verseNum)
-            }
-
-            override fun onDone(utteranceId: String?) {
-                val verses = viewModel.uiState.value.currentChapterContent.verses
-                val lastVerseNum = verses.lastOrNull()?.verseNumber
-                val finishedNum = utteranceId?.removePrefix("verse_")?.toIntOrNull()
-                if (finishedNum != null && finishedNum == lastVerseNum) {
-                    viewModel.updateSpeechState(isSpeaking = false, verseNumber = null)
+        runCatching {
+            engine = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    runCatching { engine?.language = Locale.US }
+                    isTtsReady = true
                 }
             }
+            engine?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {
+                    val verseNum = utteranceId?.removePrefix("verse_")?.toIntOrNull()
+                    viewModel.updateSpeechState(isSpeaking = true, verseNumber = verseNum)
+                }
 
-            @Deprecated("Deprecated in Java")
-            override fun onError(utteranceId: String?) {
-                viewModel.updateSpeechState(isSpeaking = false, verseNumber = null)
-            }
-        })
-        ttsEngine = engine
+                override fun onDone(utteranceId: String?) {
+                    val verses = viewModel.uiState.value.currentChapterContent.verses
+                    if (utteranceId == "intro_header") {
+                        val firstVerse = verses.firstOrNull()
+                        if (firstVerse != null) {
+                            runCatching {
+                                engine?.speak(
+                                    firstVerse.text,
+                                    TextToSpeech.QUEUE_ADD,
+                                    null,
+                                    "verse_${firstVerse.verseNumber}"
+                                )
+                            }
+                        } else {
+                            viewModel.updateSpeechState(isSpeaking = false, verseNumber = null)
+                        }
+                        return
+                    }
+                    val finishedNum = utteranceId?.removePrefix("verse_")?.toIntOrNull()
+                    val currentIdx = verses.indexOfFirst { it.verseNumber == finishedNum }
+                    val nextVerse = if (currentIdx >= 0) verses.getOrNull(currentIdx + 1) else null
+                    if (nextVerse != null && viewModel.uiState.value.isSpeaking) {
+                        runCatching {
+                            engine?.speak(
+                                nextVerse.text,
+                                TextToSpeech.QUEUE_ADD,
+                                null,
+                                "verse_${nextVerse.verseNumber}"
+                            )
+                        }
+                    } else {
+                        viewModel.updateSpeechState(isSpeaking = false, verseNumber = null)
+                    }
+                }
+
+                @Deprecated("Deprecated in Java")
+                override fun onError(utteranceId: String?) {
+                    viewModel.updateSpeechState(isSpeaking = false, verseNumber = null)
+                }
+            })
+            ttsEngine = engine
+        }
 
         onDispose {
-            engine.stop()
-            engine.shutdown()
+            runCatching {
+                engine?.stop()
+                engine?.shutdown()
+            }
         }
     }
 
     val toggleAudioNarration: () -> Unit = {
         val engine = ttsEngine
         if (uiState.isSpeaking) {
-            engine?.stop()
+            runCatching { engine?.stop() }
             viewModel.updateSpeechState(isSpeaking = false, verseNumber = null)
         } else if (engine != null && isTtsReady) {
-            engine.setSpeechRate(uiState.speechRate)
-            val verses = uiState.currentChapterContent.verses
-            val headerIntro = "${uiState.currentChapterContent.bookInfo.name} Chapter ${uiState.selectedChapterNumber}. ${uiState.currentChapterContent.metadata.artTitle}."
-            engine.speak(headerIntro, TextToSpeech.QUEUE_FLUSH, null, "intro_header")
-            verses.forEach { v ->
-                engine.speak(
-                    v.text,
-                    TextToSpeech.QUEUE_ADD,
-                    null,
-                    "verse_${v.verseNumber}"
+            runCatching {
+                engine.setSpeechRate(uiState.speechRate)
+                val verses = uiState.currentChapterContent.verses
+                val headerIntro = "${uiState.currentChapterContent.bookInfo.name} Chapter ${uiState.selectedChapterNumber}. ${uiState.currentChapterContent.metadata.artTitle}."
+                engine.speak(headerIntro, TextToSpeech.QUEUE_FLUSH, null, "intro_header")
+                viewModel.updateSpeechState(
+                    isSpeaking = true,
+                    verseNumber = verses.firstOrNull()?.verseNumber
                 )
             }
-            viewModel.updateSpeechState(
-                isSpeaking = true,
-                verseNumber = verses.firstOrNull()?.verseNumber
-            )
         }
     }
 

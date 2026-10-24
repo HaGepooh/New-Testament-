@@ -586,6 +586,9 @@ fun ImmersiveReaderScreen(
                         }
                     }
 
+                    val chapterNumbers = remember(book.chapterCount) {
+                        (1..book.chapterCount).toList()
+                    }
                     LazyRow(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -594,7 +597,7 @@ fun ImmersiveReaderScreen(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items((1..book.chapterCount).toList()) { chNum ->
+                        items(chapterNumbers, key = { it }) { chNum ->
                         val isSelected = chNum == metadata.chapterNumber
                         val isDone = completedChapterKeys.contains("${book.id}_$chNum")
 
@@ -1009,7 +1012,7 @@ fun ImmersiveReaderScreen(
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = "Track your journey through all 260 New Testament chapters",
+                                        text = "Track your journey through all 441 Sacred Chapters (New Testament, Psalms & Proverbs)",
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )

@@ -35,69 +35,38 @@ class BibleRepository(
         val cacheKey = "${bookId}_${chapterNumber}_${translation.code}"
 
         // 1. Check local Room database cache first
-        val cached = bibleDao.getCachedChapter(cacheKey)
-        if (cached != null) {
-            val decoded = deserializeVerses(bookId, chapterNumber, cached.versesPayload)
-            if (decoded.isNotEmpty()) {
-                return@withContext ChapterContent(
-                    metadata = metadata,
-                    bookInfo = book,
-                    verses = decoded,
-                    translation = translation,
-                    isFromLiveNetwork = true
-                )
+        runCatching {
+            val cached = bibleDao.getCachedChapter(cacheKey)
+            if (cached != null) {
+                val decoded = deserializeVerses(bookId, chapterNumber, cached.versesPayload)
+                if (decoded.isNotEmpty()) {
+                    return@withContext ChapterContent(
+                        metadata = metadata,
+                        bookInfo = book,
+                        verses = decoded,
+                        translation = translation,
+                        isFromLiveNetwork = false
+                    )
+                }
             }
         }
 
-        // 2. Fetch full chapter from bible-api.com and cache in Room
-        try {
-            val passageQuery = URLEncoder.encode("${book.apiName} $chapterNumber", "UTF-8")
-            val response = apiService.getChapter(
-                passage = passageQuery,
-                translation = translation.code
-            )
-            val apiVerses = response.verses.orEmpty().mapNotNull { dto ->
-                val vNum = dto.verse ?: return@mapNotNull null
-                val cleanText = dto.text
-                    ?.replace("\n", " ")
-                    ?.replace(Regex("\\s+"), " ")
-                    ?.trim()
-                    ?: return@mapNotNull null
-                if (cleanText.isEmpty()) return@mapNotNull null
-                val isChrist = isLikelyChristWords(bookId, cleanText)
-                VerseItem(
-                    bookId = bookId,
-                    chapterNumber = chapterNumber,
-                    verseNumber = vNum,
-                    text = cleanText,
-                    isWordsOfChrist = isChrist
-                )
-            }
-
-            if (apiVerses.isNotEmpty()) {
+        // 2. Bundled Offline Scripture (instantaneous across all 441 chapters)
+        val offlineVerses = OfflineScriptureProvider.getOfflineVerses(bookId, chapterNumber, translation)
+        runCatching {
+            if (offlineVerses.isNotEmpty()) {
                 bibleDao.insertCachedChapter(
                     CachedChapterEntity(
                         cacheKey = cacheKey,
                         bookId = bookId,
                         chapterNumber = chapterNumber,
                         translationCode = translation.code,
-                        versesPayload = serializeVerses(apiVerses)
+                        versesPayload = serializeVerses(offlineVerses)
                     )
                 )
-                return@withContext ChapterContent(
-                    metadata = metadata,
-                    bookInfo = book,
-                    verses = apiVerses,
-                    translation = translation,
-                    isFromLiveNetwork = true
-                )
             }
-        } catch (_: Exception) {
-            // Gracefully fall back to bundled offline scripture
         }
 
-        // 3. Bundled Offline Scripture fallback
-        val offlineVerses = OfflineScriptureProvider.getOfflineVerses(bookId, chapterNumber, translation)
         ChapterContent(
             metadata = metadata,
             bookInfo = book,

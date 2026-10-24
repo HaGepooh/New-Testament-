@@ -105,7 +105,7 @@ fun TreasuresAndProgressScreen(
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
-                        text = "Your New Testament reading progress and jewel-highlighted verses",
+                        text = "Your New Testament, Psalms & Proverbs reading progress and jewel-highlighted verses",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -139,7 +139,7 @@ fun TreasuresAndProgressScreen(
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                                 Text(
-                                    text = "New Testament Illumination",
+                                    text = "Sacred Canon Illumination",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold
                                 )

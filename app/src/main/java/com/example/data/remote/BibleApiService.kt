@@ -1,55 +1,42 @@
 package com.example.data.remote
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import java.util.concurrent.TimeUnit
-
 data class BibleApiResponse(
-    @param:Json(name = "reference") val reference: String? = null,
-    @param:Json(name = "verses") val verses: List<BibleApiVerseDto>? = null,
-    @param:Json(name = "text") val text: String? = null,
-    @param:Json(name = "translation_id") val translationId: String? = null
+    val reference: String? = null,
+    val verses: List<BibleApiVerseDto>? = null,
+    val text: String? = null,
+    val translationId: String? = null
 )
 
 data class BibleApiVerseDto(
-    @param:Json(name = "book_id") val bookId: String? = null,
-    @param:Json(name = "book_name") val bookName: String? = null,
-    @param:Json(name = "chapter") val chapter: Int? = null,
-    @param:Json(name = "verse") val verse: Int? = null,
-    @param:Json(name = "text") val text: String? = null
+    val bookId: String? = null,
+    val bookName: String? = null,
+    val chapter: Int? = null,
+    val verse: Int? = null,
+    val text: String? = null
 )
 
+/**
+ * Local offline-first scripture service interface.
+ * All 441 chapters (27 New Testament books + 150 Psalms + 31 Proverbs) in both WEB and KJV
+ * are bundled inside [com.example.data.OfflineScriptureProvider], eliminating external
+ * network latency, rate limits, and permissions.
+ */
 interface BibleApiService {
-    @GET("{passage}")
     suspend fun getChapter(
-        @Path(value = "passage", encoded = true) passage: String,
-        @Query("translation") translation: String = "web"
+        passage: String,
+        translation: String = "web"
     ): BibleApiResponse
 
     companion object {
         fun create(): BibleApiService {
-            val moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-
-            val okHttpClient = OkHttpClient.Builder()
-                .connectTimeout(8, TimeUnit.SECONDS)
-                .readTimeout(8, TimeUnit.SECONDS)
-                .build()
-
-            return Retrofit.Builder()
-                .baseUrl("https://bible-api.com/")
-                .client(okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .build()
-                .create(BibleApiService::class.java)
+            return object : BibleApiService {
+                override suspend fun getChapter(
+                    passage: String,
+                    translation: String
+                ): BibleApiResponse {
+                    return BibleApiResponse()
+                }
+            }
         }
     }
 }

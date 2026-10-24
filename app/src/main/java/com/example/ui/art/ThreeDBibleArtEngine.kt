@@ -320,11 +320,17 @@ object ThreeDBibleArtEngine {
         Color(0xFFF7B948)
     )
 
+    private val chapterSlidesCache = java.util.concurrent.ConcurrentHashMap<String, List<Chapter3DSceneSlide>>(64)
+    private val verseVariationsCache = java.util.concurrent.ConcurrentHashMap<String, List<Verse3DPictureSpec>>(512)
+
     /**
      * Generates 6 completely different 3D character & story pictures for every chapter,
      * with ENTIRELY DIFFERENT lead & companion characters in every single picture!
      */
     fun getChapter3DSlides(metadata: ChapterArtMetadata): List<Chapter3DSceneSlide> {
+        val cacheKey = "${metadata.bookId}_${metadata.chapterNumber}"
+        chapterSlidesCache[cacheKey]?.let { return it }
+
         val allChars = BiblicalCharactersCatalog.allCharacters
         val chapterCast = BiblicalCharactersCatalog.getCharactersForChapter(
             metadata.bookId,
@@ -424,7 +430,10 @@ object ThreeDBibleArtEngine {
                 environmentStage = stages[(baseStageIdx + 10) % stages.size],
                 pictureType = Verse3DPictureType.APOCALYPTIC_LAMB_AND_NEW_JERUSALEM_3D
             )
-        )
+        ).also { slides ->
+            if (chapterSlidesCache.size > 128) chapterSlidesCache.clear()
+            chapterSlidesCache[cacheKey] = slides
+        }
     }
 
     /**
@@ -437,8 +446,11 @@ object ThreeDBibleArtEngine {
         verse: VerseItem,
         metadata: ChapterArtMetadata
     ): List<Verse3DPictureSpec> {
+        val cacheKey = "${verse.bookId}_${verse.chapterNumber}_${verse.verseNumber}"
+        verseVariationsCache[cacheKey]?.let { return it }
+
         val allChars = BiblicalCharactersCatalog.allCharacters
-        val totalChars = allChars.size // 30 distinct characters
+        val totalChars = allChars.size // 34 distinct characters
         val allTypes = Verse3DPictureType.entries
         val allStages = ThreeDEnvironmentStage.entries
 
@@ -576,7 +588,10 @@ object ThreeDBibleArtEngine {
                 lightAngleFraction = ((verse.verseNumber * 53 + 50) % 100) / 100f,
                 cameraZoom = 0.94f
             )
-        )
+        ).also { specs ->
+            if (verseVariationsCache.size > 1024) verseVariationsCache.clear()
+            verseVariationsCache[cacheKey] = specs
+        }
     }
 
     /**
