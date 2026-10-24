@@ -16,13 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Collections
-import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -89,7 +89,7 @@ private val navTabs = listOf(
         destination = AppDestination.SANCTUARY_READER,
         label = "Sanctuary",
         selectedIcon = Icons.AutoMirrored.Filled.MenuBook,
-        unselectedIcon = Icons.Outlined.MenuBook,
+        unselectedIcon = Icons.AutoMirrored.Outlined.MenuBook,
         testTag = "nav_tab_sanctuary"
     ),
     NavTabInfo(

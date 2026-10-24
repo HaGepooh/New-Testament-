@@ -140,5 +140,26 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.test.manifest)
   debugImplementation(libs.androidx.compose.ui.tooling)
   "ksp"(libs.androidx.room.compiler)
-  "ksp"(libs.moshi.kotlin.codegen)
+  // "ksp"(libs.moshi.kotlin.codegen)
+}
+
+tasks.configureEach {
+  if (name.startsWith("ksp")) {
+    doFirst {
+      val previousHandler = Thread.getDefaultUncaughtExceptionHandler()
+      Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+        if (thread.name.startsWith("AWT-EventQueue") &&
+          throwable.stackTrace.any { it.className.contains("ksp.com.intellij") }
+        ) {
+          return@setDefaultUncaughtExceptionHandler
+        }
+        if (previousHandler != null) {
+          previousHandler.uncaughtException(thread, throwable)
+        } else {
+          System.err.println("Exception in thread \"${thread.name}\" $throwable")
+          throwable.printStackTrace(System.err)
+        }
+      }
+    }
+  }
 }

@@ -12,18 +12,18 @@ import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 data class BibleApiResponse(
-    @Json(name = "reference") val reference: String? = null,
-    @Json(name = "verses") val verses: List<BibleApiVerseDto>? = null,
-    @Json(name = "text") val text: String? = null,
-    @Json(name = "translation_id") val translationId: String? = null
+    @param:Json(name = "reference") val reference: String? = null,
+    @param:Json(name = "verses") val verses: List<BibleApiVerseDto>? = null,
+    @param:Json(name = "text") val text: String? = null,
+    @param:Json(name = "translation_id") val translationId: String? = null
 )
 
 data class BibleApiVerseDto(
-    @Json(name = "book_id") val bookId: String? = null,
-    @Json(name = "book_name") val bookName: String? = null,
-    @Json(name = "chapter") val chapter: Int? = null,
-    @Json(name = "verse") val verse: Int? = null,
-    @Json(name = "text") val text: String? = null
+    @param:Json(name = "book_id") val bookId: String? = null,
+    @param:Json(name = "book_name") val bookName: String? = null,
+    @param:Json(name = "chapter") val chapter: Int? = null,
+    @param:Json(name = "verse") val verse: Int? = null,
+    @param:Json(name = "text") val text: String? = null
 )
 
 interface BibleApiService {

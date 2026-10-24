@@ -36,7 +36,7 @@ import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.StopCircle
@@ -219,7 +219,7 @@ fun ImmersiveReaderScreen(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.MenuBook,
+                                        imageVector = Icons.AutoMirrored.Filled.MenuBook,
                                         contentDescription = null,
                                         tint = metadata.palette.goldLeaf,
                                         modifier = Modifier.size(16.dp)
