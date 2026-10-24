@@ -178,7 +178,8 @@ fun DrawScope.drawDetailedBiblicalPortrait(
         CharacterVisualStyle.MARY_MAGDALENE,
         CharacterVisualStyle.SAMARITAN_WOMAN_WELL,
         CharacterVisualStyle.MARTHA_AND_MARY_BETHANY,
-        CharacterVisualStyle.LYDIA_OF_THYATIRA
+        CharacterVisualStyle.LYDIA_OF_THYATIRA,
+        CharacterVisualStyle.LADY_WISDOM_VIRTUOUS
     )
     val isArchangel = style == CharacterVisualStyle.GABRIEL_ARCHANGEL ||
         style == CharacterVisualStyle.MICHAEL_ARCHANGEL
@@ -424,14 +425,30 @@ fun DrawScope.drawDetailedBiblicalPortrait(
             drawCircle(color = gold, radius = scale * 0.045f, center = Offset(cx, headCy - scale * 0.38f))
             drawCircle(color = gold, radius = scale * 0.045f, center = Offset(cx - scale * 0.56f, shoulderTopY + scale * 0.32f))
             drawCircle(color = gold, radius = scale * 0.045f, center = Offset(cx + scale * 0.56f, shoulderTopY + scale * 0.32f))
+        } else if (style == CharacterVisualStyle.LADY_WISDOM_VIRTUOUS) {
+            // Golden Diadem with Faceted Ruby for Lady Wisdom / Virtuous Woman
+            drawArc(
+                color = gold,
+                startAngle = 200f,
+                sweepAngle = 140f,
+                useCenter = false,
+                topLeft = Offset(cx - scale * 0.32f, headCy - scale * 0.50f),
+                size = Size(scale * 0.64f, scale * 0.28f),
+                style = Stroke(width = 5f, cap = StrokeCap.Round)
+            )
+            drawCircle(color = Color(0xFFE01E48), radius = scale * 0.055f, center = Offset(cx, headCy - scale * 0.48f))
         }
-    } else if (style == CharacterVisualStyle.WISE_MAGI_KING) {
-        // 3D Jeweled Eastern Royal Crown
+    } else if (
+        style == CharacterVisualStyle.WISE_MAGI_KING ||
+        style == CharacterVisualStyle.KING_DAVID_PSALMIST ||
+        style == CharacterVisualStyle.KING_SOLOMON_WISDOM
+    ) {
+        // 3D Jeweled Royal Crown of David, Solomon & Magi
         val crownPath = Path().apply {
             moveTo(cx - scale * 0.36f, headCy - scale * 0.22f)
             lineTo(cx - scale * 0.40f, headCy - scale * 0.58f)
             lineTo(cx - scale * 0.18f, headCy - scale * 0.42f)
-            lineTo(cx, headCy - scale * 0.66f)
+            lineTo(cx, headCy - scale * 0.68f)
             lineTo(cx + scale * 0.18f, headCy - scale * 0.42f)
             lineTo(cx + scale * 0.40f, headCy - scale * 0.58f)
             lineTo(cx + scale * 0.36f, headCy - scale * 0.22f)
@@ -440,6 +457,8 @@ fun DrawScope.drawDetailedBiblicalPortrait(
         drawPath(crownPath, color = gold)
         drawPath(crownPath, color = Color.White, style = Stroke(width = 2f))
         drawCircle(color = Color(0xFFD91E48), radius = scale * 0.05f, center = Offset(cx, headCy - scale * 0.36f))
+        drawCircle(color = Color(0xFF1E88E5), radius = scale * 0.04f, center = Offset(cx - scale * 0.20f, headCy - scale * 0.34f))
+        drawCircle(color = Color(0xFF2E9E6B), radius = scale * 0.04f, center = Offset(cx + scale * 0.20f, headCy - scale * 0.34f))
     } else if (style == CharacterVisualStyle.CORNELIUS_CENTURION) {
         // 3D Gilded Roman Helmet with Crimson Horsehair Crest
         drawArc(
@@ -727,6 +746,68 @@ fun DrawScope.drawDetailedBiblicalPortrait(
             )
             drawCircle(color = Color.White, radius = scale * 0.11f, center = Offset(leftAttrX, handY - scale * 0.30f))
             drawCircle(color = gold, radius = scale * 0.045f, center = Offset(leftAttrX, handY - scale * 0.30f))
+        }
+
+        CharacterVisualStyle.KING_DAVID_PSALMIST,
+        CharacterVisualStyle.ASAPH_AND_KORAH -> {
+            // 3D 10-Stringed Golden Kinnor Harp / Sanctuary Psaltery
+            val harpPath = Path().apply {
+                moveTo(leftAttrX - scale * 0.24f, handY + scale * 0.28f)
+                lineTo(leftAttrX + scale * 0.24f, handY + scale * 0.28f)
+                quadraticTo(leftAttrX + scale * 0.32f, handY - scale * 0.25f, leftAttrX + scale * 0.18f, handY - scale * 0.42f)
+                quadraticTo(leftAttrX, handY - scale * 0.32f, leftAttrX - scale * 0.22f, handY - scale * 0.38f)
+                close()
+            }
+            drawPath(harpPath, color = gold, style = Stroke(width = 4.5f, cap = StrokeCap.Round))
+            for (s in -2..2) {
+                val sx = leftAttrX + s * (scale * 0.075f)
+                drawLine(
+                    color = Color.White.copy(alpha = 0.88f),
+                    start = Offset(sx, handY - scale * 0.32f),
+                    end = Offset(sx, handY + scale * 0.25f),
+                    strokeWidth = 1.6f
+                )
+            }
+        }
+
+        CharacterVisualStyle.KING_SOLOMON_WISDOM -> {
+            // Royal Golden Scepter of Wisdom & Illuminated Scroll
+            drawLine(
+                color = gold,
+                start = Offset(leftAttrX + scale * 0.06f, headCy - scale * 0.40f),
+                end = Offset(leftAttrX + scale * 0.06f, torsoBottomY),
+                strokeWidth = 5.5f,
+                cap = StrokeCap.Round
+            )
+            drawCircle(
+                color = gold,
+                radius = scale * 0.13f,
+                center = Offset(leftAttrX + scale * 0.06f, headCy - scale * 0.44f)
+            )
+            drawCircle(
+                color = Color(0xFF1E88E5),
+                radius = scale * 0.065f,
+                center = Offset(leftAttrX + scale * 0.06f, headCy - scale * 0.44f)
+            )
+        }
+
+        CharacterVisualStyle.LADY_WISDOM_VIRTUOUS -> {
+            // Golden Lamp of Understanding & Faceted Ruby Treasure
+            drawOval(
+                color = gold,
+                topLeft = Offset(leftAttrX - scale * 0.22f, handY - scale * 0.08f),
+                size = Size(scale * 0.44f, scale * 0.22f)
+            )
+            drawCircle(
+                color = Color(0xFFFFF3B0),
+                radius = scale * 0.10f,
+                center = Offset(leftAttrX + scale * 0.16f, handY - scale * 0.16f)
+            )
+            drawCircle(
+                color = Color(0xFFE01E48),
+                radius = scale * 0.09f,
+                center = Offset(leftAttrX - scale * 0.04f, handY - scale * 0.24f)
+            )
         }
 
         else -> {

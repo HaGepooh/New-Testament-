@@ -27,50 +27,50 @@ import org.robolectric.annotation.Config
 class ExampleRobolectricTest {
 
     @Test
-    fun `30 biblical characters, 6 distinct 3D chapter slides, and 3 disjoint-character 3D variations per verse are configured`() {
+    fun `34 biblical characters, Psalms and Proverbs 3D chapters, and 3 disjoint-character 3D variations per verse are configured`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val appName = context.getString(R.string.app_name)
         assertEquals("The Radiant New Testament", appName)
 
-        // Verify all 27 New Testament books and 260 chapters have unique artwork metadata
-        assertEquals(27, NewTestamentBooks.allBooks.size)
+        // Verify all 29 Sacred Books (27 New Testament + Psalms & Proverbs) and 441 chapters have unique artwork metadata
+        assertEquals(29, NewTestamentBooks.allBooks.size)
         val allChapters = ChapterArtRegistry.getAll260Chapters()
-        assertEquals(260, allChapters.size)
+        assertEquals(441, allChapters.size)
         assertTrue(allChapters.all { it.artTitle.isNotBlank() && it.visualMeditation.isNotBlank() })
 
-        // Verify all 30 biblical characters & disciples portraits
-        assertEquals(30, BiblicalCharactersCatalog.allCharacters.size)
+        // Verify all 34 biblical characters & disciples portraits (including King David, Asaph, King Solomon, Lady Wisdom)
+        assertEquals(34, BiblicalCharactersCatalog.allCharacters.size)
 
-        // Verify each chapter generates 6 distinct 3D story & character slides with different characters in each slide
-        val mat5Meta = ChapterArtRegistry.getChapterMetadata("MAT", 5)
-        val slides = ThreeDBibleArtEngine.getChapter3DSlides(mat5Meta)
-        assertEquals(6, slides.size)
-        val slideLeadIds = slides.map { it.leadCharacter.id }.toSet()
-        assertEquals(6, slideLeadIds.size)
+        // Verify Psalms (150 chapters) and Proverbs (31 chapters) have offline verses, 6 3D chapter slides, and 3D verse variations
+        for ((bookId, chNum) in listOf("MAT" to 5, "PSA" to 23, "PSA" to 150, "PRO" to 3, "PRO" to 31)) {
+            val chMeta = ChapterArtRegistry.getChapterMetadata(bookId, chNum)
+            val slides = ThreeDBibleArtEngine.getChapter3DSlides(chMeta)
+            assertEquals(6, slides.size)
+            val slideLeadIds = slides.map { it.leadCharacter.id }.toSet()
+            assertEquals(6, slideLeadIds.size)
 
-        // Verify offline verses exist for Matthew 5 and each verse gets 3 distinct 3D picture variations
-        // with 6 completely different characters across the 3 variations of every verse
-        val mat5 = OfflineScriptureProvider.getOfflineVerses("MAT", 5, BibleTranslation.WEB)
-        assertTrue(mat5.isNotEmpty())
+            val verses = OfflineScriptureProvider.getOfflineVerses(bookId, chNum, BibleTranslation.KJV)
+            assertTrue(verses.isNotEmpty())
 
-        mat5.forEachIndexed { idx, verse ->
-            val variations = ThreeDBibleArtEngine.getVerse3DPictureVariations(verse, mat5Meta)
-            assertEquals(3, variations.size)
+            verses.forEachIndexed { idx, verse ->
+                val variations = ThreeDBibleArtEngine.getVerse3DPictureVariations(verse, chMeta)
+                assertEquals(3, variations.size)
 
-            // Verify all 6 characters across the 3 variations of this verse are completely distinct
-            val charIdsInVerse = variations.flatMap {
-                listOfNotNull(it.primaryCharacter.id, it.secondaryCharacter?.id)
-            }
-            assertEquals(6, charIdsInVerse.toSet().size)
+                // Verify all 6 characters across the 3 variations of this verse are completely distinct
+                val charIdsInVerse = variations.flatMap {
+                    listOfNotNull(it.primaryCharacter.id, it.secondaryCharacter?.id)
+                }
+                assertEquals(6, charIdsInVerse.toSet().size)
 
-            // Verify consecutive verses never have the same primary character & stage
-            if (idx > 0) {
-                val prevSpec = ThreeDBibleArtEngine.resolveVerse3DPicture(mat5[idx - 1], mat5Meta)
-                val currSpec = variations.first()
-                assertNotEquals(
-                    "${prevSpec.primaryCharacter.id}_${prevSpec.secondaryCharacter?.id}",
-                    "${currSpec.primaryCharacter.id}_${currSpec.secondaryCharacter?.id}"
-                )
+                // Verify consecutive verses never have the same primary character & secondary character pair
+                if (idx > 0) {
+                    val prevSpec = ThreeDBibleArtEngine.resolveVerse3DPicture(verses[idx - 1], chMeta)
+                    val currSpec = variations.first()
+                    assertNotEquals(
+                        "${prevSpec.primaryCharacter.id}_${prevSpec.secondaryCharacter?.id}",
+                        "${currSpec.primaryCharacter.id}_${currSpec.secondaryCharacter?.id}"
+                    )
+                }
             }
         }
     }

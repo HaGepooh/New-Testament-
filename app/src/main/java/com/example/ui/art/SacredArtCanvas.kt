@@ -99,6 +99,8 @@ fun SacredArtCanvas(
                 SceneArchetype.SEVEN_LAMPSTANDS -> drawSevenLampstandsScene(w, h, palette, pulse)
                 SceneArchetype.THRONE_AND_RAINBOW -> drawThroneAndRainbowScene(w, h, palette, pulse)
                 SceneArchetype.NEW_JERUSALEM_TREE -> drawNewJerusalemTreeScene(w, h, palette, pulse)
+                SceneArchetype.DAVID_HARP_PASTURES -> drawDavidHarpPasturesScene(w, h, palette, pulse)
+                SceneArchetype.SOLOMON_WISDOM_PILLARS -> drawSolomonWisdomPillarsScene(w, h, palette, pulse)
             }
 
             // 4. Mode-Specific Artistic Overlay (Stained Glass Leadwork vs Gold Codex vs Fresco)
@@ -1204,6 +1206,113 @@ private fun DrawScope.drawNewJerusalemTreeScene(w: Float, h: Float, p: ArtPalett
         style = CharacterVisualStyle.JESUS_PANTOCRATOR,
         primaryRobe = Color(0xFF9E1F38),
         mantle = Color(0xFF1B4B8A),
+        gold = p.goldLeaf,
+        pulse = pulse
+    )
+}
+
+private fun DrawScope.drawDavidHarpPasturesScene(w: Float, h: Float, p: ArtPalette, pulse: Float) {
+    // Lush Emerald Pastures of Bethlehem & Still Waters River
+    drawLayeredHills(w, h, Color(0xFF287D65), Color(0xFF1A5E4B), p.foregroundSilhouette)
+    val river = Path().apply {
+        moveTo(w * 0.42f, h * 0.62f)
+        cubicTo(w * 0.28f, h * 0.75f, w * 0.68f, h * 0.85f, w * 0.20f, h)
+        lineTo(w * 0.80f, h)
+        cubicTo(w * 0.86f, h * 0.84f, w * 0.54f, h * 0.74f, w * 0.58f, h * 0.62f)
+        close()
+    }
+    drawPath(
+        river,
+        brush = Brush.verticalGradient(
+            listOf(Color(0xFF5CE6F5), Color(0xFF1D749B), p.waterOrGround)
+        )
+    )
+    drawOliveTree(w * 0.14f, h * 0.84f, h * 0.28f, p.foregroundSilhouette, Color(0xFF2AA876), p.goldLeaf)
+    drawOliveTree(w * 0.86f, h * 0.84f, h * 0.28f, p.foregroundSilhouette, Color(0xFF2AA876), p.goldLeaf)
+
+    val figScale = min(w, h) * 0.135f
+    // Asaph Chief Musician on left, King David Psalmist in center with Golden Harp
+    drawDetailedBiblicalPortrait(
+        cx = w * 0.26f,
+        headCy = h * 0.58f,
+        scale = figScale * 0.84f,
+        style = CharacterVisualStyle.ASAPH_AND_KORAH,
+        primaryRobe = Color(0xFF1E6E78),
+        mantle = Color(0xFFD99A2B),
+        gold = p.goldLeaf,
+        pulse = pulse
+    )
+    drawDetailedBiblicalPortrait(
+        cx = w * 0.54f,
+        headCy = h * 0.48f,
+        scale = figScale * 1.06f,
+        style = CharacterVisualStyle.KING_DAVID_PSALMIST,
+        primaryRobe = Color(0xFF1B5E7A),
+        mantle = Color(0xFF9E1F38),
+        gold = p.goldLeaf,
+        pulse = pulse
+    )
+    // Sculpted 3D Golden Kinnor Harp in foreground
+    val hx = w * 0.76f
+    val hy = h * 0.72f
+    val harpFrame = Path().apply {
+        moveTo(hx - 24f, hy + 28f)
+        lineTo(hx + 24f, hy + 28f)
+        quadraticTo(hx + 34f, hy - 34f, hx + 18f, hy - 54f)
+        quadraticTo(hx, hy - 44f, hx - 22f, hy - 48f)
+        quadraticTo(hx - 30f, hy - 10f, hx - 24f, hy + 28f)
+        close()
+    }
+    drawPath(harpFrame, color = p.goldLeaf, style = Stroke(width = 5.5f, cap = StrokeCap.Round))
+    for (s in -2..2) {
+        val sx = hx + s * 7.5f
+        drawLine(
+            color = Color.White.copy(alpha = 0.85f),
+            start = Offset(sx, hy - 42f),
+            end = Offset(sx, hy + 24f),
+            strokeWidth = 1.8f
+        )
+    }
+}
+
+private fun DrawScope.drawSolomonWisdomPillarsScene(w: Float, h: Float, p: ArtPalette, pulse: Float) {
+    // Seven Sculpted Pillars of Wisdom
+    val colBottom = h * 0.88f
+    val colTop = h * 0.26f
+    for (i in 0..6) {
+        val cx = w * (0.08f + i * 0.14f)
+        drawRect(
+            brush = Brush.horizontalGradient(
+                listOf(Color(0xFFD9CEB8), Color(0xFFFFFAF0), Color(0xFFB8A98E)),
+                startX = cx - 10f,
+                endX = cx + 10f
+            ),
+            topLeft = Offset(cx - 10f, colTop),
+            size = Size(20f, colBottom - colTop)
+        )
+        drawRect(color = p.goldLeaf, topLeft = Offset(cx - 15f, colTop - 8f), size = Size(30f, 10f))
+        drawRect(color = p.goldLeaf, topLeft = Offset(cx - 15f, colBottom - 6f), size = Size(30f, 10f))
+    }
+
+    val figScale = min(w, h) * 0.135f
+    // King Solomon and Lady Wisdom in the Seven-Pillared Royal Court
+    drawDetailedBiblicalPortrait(
+        cx = w * 0.36f,
+        headCy = h * 0.50f,
+        scale = figScale * 1.04f,
+        style = CharacterVisualStyle.KING_SOLOMON_WISDOM,
+        primaryRobe = Color(0xFF4B2378),
+        mantle = Color(0xFFD99426),
+        gold = p.goldLeaf,
+        pulse = pulse
+    )
+    drawDetailedBiblicalPortrait(
+        cx = w * 0.68f,
+        headCy = h * 0.54f,
+        scale = figScale * 0.92f,
+        style = CharacterVisualStyle.LADY_WISDOM_VIRTUOUS,
+        primaryRobe = Color(0xFF9E1F46),
+        mantle = Color(0xFF28558A),
         gold = p.goldLeaf,
         pulse = pulse
     )

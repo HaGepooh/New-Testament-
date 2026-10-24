@@ -31,6 +31,11 @@ enum class TestamentCategory(
         title = "Apocalyptic Prophecy",
         subtitle = "The Revelation of Christ & The New Jerusalem",
         accentHex = 0xFF9E63E8
+    ),
+    POETRY_AND_WISDOM(
+        title = "Psalms & Proverbs",
+        subtitle = "Sacred Songs of King David & Royal Proverbs of Solomon",
+        accentHex = 0xFFF5B83D
     )
 }
 
@@ -61,7 +66,9 @@ enum class SceneArchetype(
     ANCHOR_OF_HOPE("Golden Anchor of the Soul & Olive Crown", "Wisdom & Epistles"),
     SEVEN_LAMPSTANDS("Seven Golden Menorah Lampstands & Seven Stars", "Apocalyptic Vision"),
     THRONE_AND_RAINBOW("Emerald Rainbow Throne & Sea of Crystal Glass", "Apocalyptic Vision"),
-    NEW_JERUSALEM_TREE("River of Crystal Water & The Tree of Life", "Apocalyptic Vision")
+    NEW_JERUSALEM_TREE("River of Crystal Water & The Tree of Life", "Apocalyptic Vision"),
+    DAVID_HARP_PASTURES("David's Golden Harp & Still Waters of Zion", "Psalms & Proverbs"),
+    SOLOMON_WISDOM_PILLARS("Seven Pillars of Royal Wisdom & Crown of Gold", "Psalms & Proverbs")
 }
 
 enum class ArtStyleMode(val label: String, val description: String) {

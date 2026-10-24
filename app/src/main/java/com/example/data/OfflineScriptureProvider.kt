@@ -181,6 +181,225 @@ object OfflineScriptureProvider {
             RawVerse(17, "The Spirit and the bride say, 'Come!' He who hears, let him say, 'Come!' He who is thirsty, let him come. He who desires, let him take the water of life freely.", "And the Spirit and the bride say, Come. And let him that heareth say, Come. And let him that is athirst come. And whosoever will, let him take the water of life freely."),
             RawVerse(20, "He who testifies these things says, 'Yes, I come quickly.' Amen! Yes, come, Lord Jesus!", "He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus.", true),
             RawVerse(21, "The grace of the Lord Jesus Christ be with all the saints. Amen.", "The grace of our Lord Jesus Christ be with you all. Amen.")
+        ),
+
+        // ==================== PSALMS (SACRED SONGS OF ZION) ====================
+        "PSA_1" to listOf(
+            RawVerse(1, "Blessed is the man who doesn't walk in the counsel of the wicked, nor stand on the path of sinners, nor sit in the seat of scoffers;", "Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful."),
+            RawVerse(2, "but his delight is in the Lord's law. On his law he meditates day and night.", "But his delight is in the law of the Lord; and in his law doth he meditate day and night."),
+            RawVerse(3, "He will be like a tree planted by the streams of water, that produces its fruit in its season, whose leaf also does not wither. Whatever he does shall prosper.", "And he shall be like a tree planted by the rivers of water, that bringeth forth his fruit in his season; his leaf also shall not wither; and whatsoever he doeth shall prosper."),
+            RawVerse(4, "The wicked are not so, but are like the chaff which the wind drives away.", "The ungodly are not so: but are like the chaff which the wind driveth away."),
+            RawVerse(5, "Therefore the wicked shall not stand in the judgment, nor sinners in the congregation of the righteous.", "Therefore the ungodly shall not stand in the judgment, nor sinners in the congregation of the righteous."),
+            RawVerse(6, "For the Lord knows the way of the righteous, but the way of the wicked shall perish.", "For the Lord knoweth the way of the righteous: but the way of the ungodly shall perish.")
+        ),
+        "PSA_8" to listOf(
+            RawVerse(1, "Lord, our Lord, how majestic is your name in all the earth! You have set your glory above the heavens!", "O Lord our Lord, how excellent is thy name in all the earth! who hast set thy glory above the heavens."),
+            RawVerse(3, "When I consider your heavens, the work of your fingers, the moon and the stars, which you have ordained;", "When I consider thy heavens, the work of thy fingers, the moon and the stars, which thou hast ordained;"),
+            RawVerse(4, "what is man, that you think of him? What is the son of man, that you care for him?", "What is man, that thou art mindful of him? and the son of man, that thou visitest him?"),
+            RawVerse(5, "For you have made him a little lower than the angels, and crowned him with glory and honor.", "For thou hast made him a little lower than the angels, and hast crowned him with glory and honour."),
+            RawVerse(6, "You make him ruler over the works of your hands. You have put all things under his feet.", "Thou madest him to have dominion over the works of thy hands; thou hast put all things under his feet:"),
+            RawVerse(9, "Lord, our Lord, how majestic is your name in all the earth!", "O Lord our Lord, how excellent is thy name in all the earth!")
+        ),
+        "PSA_19" to listOf(
+            RawVerse(1, "The heavens declare the glory of God. The expanse shows his handiwork.", "The heavens declare the glory of God; and the firmament sheweth his handywork."),
+            RawVerse(2, "Day after day they pour out speech, and night after night they display knowledge.", "Day unto day uttereth speech, and night unto night sheweth knowledge."),
+            RawVerse(7, "The Lord's law is perfect, restoring the soul. The Lord's covenant is sure, making wise the simple.", "The law of the Lord is perfect, converting the soul: the testimony of the Lord is sure, making wise the simple."),
+            RawVerse(8, "The Lord's precepts are right, rejoicing the heart. The Lord's commandment is pure, enlightening the eyes.", "The statutes of the Lord are right, rejoicing the heart: the commandment of the Lord is pure, enlightening the eyes."),
+            RawVerse(10, "More to be desired are they than gold, yes, than much fine gold; sweeter also than honey and the extract of the honeycomb.", "More to be desired are they than gold, yea, than much fine gold: sweeter also than honey and the honeycomb."),
+            RawVerse(14, "Let the words of my mouth and the meditation of my heart be acceptable in your sight, Lord, my rock, and my redeemer.", "Let the words of my mouth, and the meditation of my heart, be acceptable in thy sight, O Lord, my strength, and my redeemer.")
+        ),
+        "PSA_23" to listOf(
+            RawVerse(1, "The Lord is my shepherd: I shall lack nothing.", "The Lord is my shepherd; I shall not want."),
+            RawVerse(2, "He makes me lie down in green pastures. He leads me beside still waters.", "He maketh me to lie down in green pastures: he leadeth me beside the still waters."),
+            RawVerse(3, "He restores my soul. He guides me in the paths of righteousness for his name's sake.", "He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake."),
+            RawVerse(4, "Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me. Your rod and your staff, they comfort me.", "Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me."),
+            RawVerse(5, "You prepare a table before me in the presence of my enemies. You anoint my head with oil. My cup runs over.", "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over."),
+            RawVerse(6, "Surely goodness and loving kindness shall follow me all the days of my life, and I will dwell in the Lord's house forever.", "Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the Lord for ever.")
+        ),
+        "PSA_24" to listOf(
+            RawVerse(1, "The earth is the Lord's, with its fullness; the world, and those who dwell in it.", "The earth is the Lord's, and the fulness thereof; the world, and they that dwell therein."),
+            RawVerse(3, "Who may ascend to the Lord's hill? Who may stand in his holy place?", "Who shall ascend into the hill of the Lord? or who shall stand in his holy place?"),
+            RawVerse(4, "He who has clean hands and a pure heart; who has not lifted up his soul to falsehood, and has not sworn deceitfully.", "He that hath clean hands, and a pure heart; who hath not lifted up his soul unto vanity, nor sworn deceitfully."),
+            RawVerse(7, "Lift up your heads, you gates! Be lifted up, you everlasting doors, and the King of glory will come in.", "Lift up your heads, O ye gates; and be ye lift up, ye everlasting doors; and the King of glory shall come in."),
+            RawVerse(8, "Who is this King of glory? The Lord strong and mighty, the Lord mighty in battle.", "Who is this King of glory? The Lord strong and mighty, the Lord mighty in battle."),
+            RawVerse(10, "Who is this King of glory? The Lord of Armies is the King of glory! Selah.", "Who is this King of glory? The Lord of hosts, he is the King of glory. Selah.")
+        ),
+        "PSA_27" to listOf(
+            RawVerse(1, "The Lord is my light and my salvation. Whom shall I fear? The Lord is the strength of my life. Of whom shall I be afraid?", "The Lord is my light and my salvation; whom shall I fear? the Lord is the strength of my life; of whom shall I be afraid?"),
+            RawVerse(4, "One thing I have asked of the Lord, that I will seek after: that I may dwell in the Lord's house all the days of my life, to see the Lord's beauty, and to inquire in his temple.", "One thing have I desired of the Lord, that will I seek after; that I may dwell in the house of the Lord all the days of my life, to behold the beauty of the Lord, and to enquire in his temple."),
+            RawVerse(5, "For in the day of trouble, he will keep me secretly in his pavilion. In the secret place of his tent, he will hide me. He will lift me up on a rock.", "For in the time of trouble he shall hide me in his pavilion: in the secret of his tabernacle shall he hide me; he shall set me up upon a rock."),
+            RawVerse(8, "When you said, 'Seek my face,' my heart said to you, 'I will seek your face, Lord.'", "When thou saidst, Seek ye my face; my heart said unto thee, Thy face, Lord, will I seek."),
+            RawVerse(13, "I am still confident of this: I will see the goodness of the Lord in the land of the living.", "I had fainted, unless I had believed to see the goodness of the Lord in the land of the living."),
+            RawVerse(14, "Wait for the Lord. Be strong, and let your heart take courage. Yes, wait for the Lord.", "Wait on the Lord: be of good courage, and he shall strengthen thine heart: wait, I say, on the Lord.")
+        ),
+        "PSA_34" to listOf(
+            RawVerse(1, "I will bless the Lord at all times. His praise will always be in my mouth.", "I will bless the Lord at all times: his praise shall continually be in my mouth."),
+            RawVerse(3, "Oh magnify the Lord with me. Let's exalt his name together.", "O magnify the Lord with me, and let us exalt his name together."),
+            RawVerse(4, "I sought the Lord, and he answered me, and delivered me from all my fears.", "I sought the Lord, and he heard me, and delivered me from all my fears."),
+            RawVerse(8, "Oh taste and see that the Lord is good. Blessed is the man who takes refuge in him.", "O taste and see that the Lord is good: blessed is the man that trusteth in him."),
+            RawVerse(18, "The Lord is near to those who have a broken heart, and saves those who have a crushed spirit.", "The Lord is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.")
+        ),
+        "PSA_42" to listOf(
+            RawVerse(1, "As the deer pants for the water brooks, so my soul pants after you, God.", "As the hart panteth after the water brooks, so panteth my soul after thee, O God."),
+            RawVerse(2, "My soul thirsts for God, for the living God. When shall I come and appear before God?", "My soul thirsteth for God, for the living God: when shall I come and appear before God?"),
+            RawVerse(5, "Why are you in despair, my soul? Why are you disturbed within me? Hope in God! For I shall still praise him for the saving help of his presence.", "Why art thou cast down, O my soul? and why art thou disquieted in me? hope thou in God: for I shall yet praise him for the help of his countenance."),
+            RawVerse(8, "The Lord will command his loving kindness in the daytime. In the night his song shall be with me: a prayer to the God of my life.", "Yet the Lord will command his lovingkindness in the daytime, and in the night his song shall be with me, and my prayer unto the God of my life."),
+            RawVerse(11, "Why are you in despair, my soul? Why are you disturbed within me? Hope in God! For I shall still praise him, the saving help of my countenance, and my God.", "Why art thou cast down, O my soul? and why art thou disquieted within me? hope thou in God: for I shall yet praise him, who is the health of my countenance, and my God.")
+        ),
+        "PSA_46" to listOf(
+            RawVerse(1, "God is our refuge and strength, a very present help in trouble.", "God is our refuge and strength, a very present help in trouble."),
+            RawVerse(2, "Therefore we won't be afraid, though the earth changes, though the mountains are shaken into the heart of the seas;", "Therefore will not we fear, though the earth be removed, and though the mountains be carried into the midst of the sea;"),
+            RawVerse(4, "There is a river, the streams of which make glad the city of God, the holy place of the tents of the Most High.", "There is a river, the streams whereof shall make glad the city of God, the holy place of the tabernacles of the most High."),
+            RawVerse(5, "God is in the midst of her. She shall not be moved. God will help her at dawn.", "God is in the midst of her; she shall not be moved: God shall help her, and that right early."),
+            RawVerse(10, "'Be still, and know that I am God. I will be exalted among the nations. I will be exalted in the earth.'", "Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth."),
+            RawVerse(11, "The Lord of Armies is with us. The God of Jacob is our refuge. Selah.", "The Lord of hosts is with us; the God of Jacob is our refuge. Selah.")
+        ),
+        "PSA_51" to listOf(
+            RawVerse(1, "Have mercy on me, God, according to your loving kindness. According to the multitude of your tender mercies, blot out my transgressions.", "Have mercy upon me, O God, according to thy lovingkindness: according unto the multitude of thy tender mercies blot out my transgressions."),
+            RawVerse(2, "Wash me thoroughly from my iniquity. Cleanse me from my sin.", "Wash me throughly from mine iniquity, and cleanse me from my sin."),
+            RawVerse(7, "Purify me with hyssop, and I will be clean. Wash me, and I will be whiter than snow.", "Purge me with hyssop, and I shall be clean: wash me, and I shall be whiter than snow."),
+            RawVerse(10, "Create in me a clean heart, O God. Renew a right spirit within me.", "Create in me a clean heart, O God; and renew a right spirit within me."),
+            RawVerse(12, "Restore to me the joy of your salvation. Uphold me with a willing spirit.", "Restore unto me the joy of thy salvation; and uphold me with thy free spirit."),
+            RawVerse(17, "The sacrifices of God are a broken spirit. O God, you will not despise a broken and contrite heart.", "The sacrifices of God are a broken spirit: a broken and a contrite heart, O God, thou wilt not despise.")
+        ),
+        "PSA_91" to listOf(
+            RawVerse(1, "He who dwells in the secret place of the Most High will rest in the shadow of the Almighty.", "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty."),
+            RawVerse(2, "I will say of the Lord, 'He is my refuge and my fortress; my God, in whom I trust.'", "I will say of the Lord, He is my refuge and my fortress: my God; in him will I trust."),
+            RawVerse(4, "He will cover you with his feathers. Under his wings you will take refuge. His faithfulness is your shield and rampart.", "He shall cover thee with his feathers, and under his wings shalt thou trust: his truth shall be thy shield and buckler."),
+            RawVerse(11, "For he will put his angels in charge of you, to guard you in all your ways.", "For he shall give his angels charge over thee, to keep thee in all thy ways."),
+            RawVerse(14, "'Because he has set his love on me, therefore I will deliver him. I will set him on high, because he has known my name.'", "Because he hath set his love upon me, therefore will I deliver him: I will set him on high, because he hath known my name."),
+            RawVerse(16, "'I will satisfy him with long life, and show him my salvation.'", "With long life will I satisfy him, and shew him my salvation.")
+        ),
+        "PSA_100" to listOf(
+            RawVerse(1, "Shout for joy to the Lord, all the earth!", "Make a joyful noise unto the Lord, all ye lands."),
+            RawVerse(2, "Serve the Lord with gladness. Come before his presence with singing.", "Serve the Lord with gladness: come before his presence with singing."),
+            RawVerse(3, "Know that the Lord, he is God. It is he who has made us, and we are his. We are his people, and the sheep of his pasture.", "Know ye that the Lord he is God: it is he that hath made us, and not we ourselves; we are his people, and the sheep of his pasture."),
+            RawVerse(4, "Enter into his gates with thanksgiving, and into his courts with praise. Give thanks to him, and bless his name.", "Enter into his gates with thanksgiving, and into his courts with praise: be thankful unto him, and bless his name."),
+            RawVerse(5, "For the Lord is good. His loving kindness endures forever, his faithfulness to all generations.", "For the Lord is good; his mercy is everlasting; and his truth endureth to all generations.")
+        ),
+        "PSA_103" to listOf(
+            RawVerse(1, "Praise the Lord, my soul! All that is within me, praise his holy name!", "Bless the Lord, O my soul: and all that is within me, bless his holy name."),
+            RawVerse(2, "Praise the Lord, my soul, and don't forget all his benefits,", "Bless the Lord, O my soul, and forget not all his benefits:"),
+            RawVerse(3, "who forgives all your sins, who heals all your diseases,", "Who forgiveth all thine iniquities; who healeth all thy diseases;"),
+            RawVerse(4, "who redeems your life from destruction, who crowns you with loving kindness and tender mercies,", "Who redeemeth thy life from destruction; who crowneth thee with lovingkindness and tender mercies;"),
+            RawVerse(11, "For as the heavens are high above the earth, so great is his loving kindness toward those who fear him.", "For as the heaven is high above the earth, so great is his mercy toward them that fear him."),
+            RawVerse(12, "As far as the east is from the west, so far has he removed our transgressions from us.", "As far as the east is from the west, so far hath he removed our transgressions from us.")
+        ),
+        "PSA_119" to listOf(
+            RawVerse(1, "Blessed are those whose ways are blameless, who walk according to the Lord's law.", "Blessed are the undefiled in the way, who walk in the law of the Lord."),
+            RawVerse(9, "How can a young man keep his way pure? By living according to your word.", "Wherewithal shall a young man cleanse his way? by taking heed thereto according to thy word."),
+            RawVerse(11, "I have hidden your word in my heart, that I might not sin against you.", "Thy word have I hid in mine heart, that I might not sin against thee."),
+            RawVerse(18, "Open my eyes, that I may see wondrous things out of your law.", "Open thou mine eyes, that I may behold wondrous things out of thy law."),
+            RawVerse(89, "Forever, Lord, your word is settled in heaven.", "For ever, O Lord, thy word is settled in heaven."),
+            RawVerse(105, "Your word is a lamp to my feet, and a light for my path.", "Thy word is a lamp unto my feet, and a light unto my path.")
+        ),
+        "PSA_121" to listOf(
+            RawVerse(1, "I will lift up my eyes to the hills. Where does my help come from?", "I will lift up mine eyes unto the hills, from whence cometh my help."),
+            RawVerse(2, "My help comes from the Lord, who made heaven and earth.", "My help cometh from the Lord, which made heaven and earth."),
+            RawVerse(3, "He will not allow your foot to be moved. He who keeps you will not slumber.", "He will not suffer thy foot to be moved: he that keepeth thee will not slumber."),
+            RawVerse(4, "Behold, he who keeps Israel will neither slumber nor sleep.", "Behold, he that keepeth Israel shall neither slumber nor sleep."),
+            RawVerse(7, "The Lord will keep you from all evil. He will keep your soul.", "The Lord shall preserve thee from all evil: he shall preserve thy soul."),
+            RawVerse(8, "The Lord will keep your going out and your coming in, from this time forward, and forever more.", "The Lord shall preserve thy going out and thy coming in from this time forth, and even for evermore.")
+        ),
+        "PSA_139" to listOf(
+            RawVerse(1, "Lord, you have searched me, and you know me.", "O Lord, thou hast searched me, and known me."),
+            RawVerse(7, "Where could I go from your Spirit? Or where could I flee from your presence?", "Whither shall I go from thy spirit? or whither shall I flee from thy presence?"),
+            RawVerse(14, "I will give thanks to you, for I am fearfully and wonderfully made. Your works are wonderful. My soul knows that very well.", "I will praise thee; for I am fearfully and wonderfully made: marvellous are thy works; and that my soul knoweth right well."),
+            RawVerse(17, "How precious to me are your thoughts, God! How vast is their sum!", "How precious also are thy thoughts unto me, O God! how great is the sum of them!"),
+            RawVerse(23, "Search me, God, and know my heart. Try me, and know my thoughts.", "Search me, O God, and know my heart: try me, and know my thoughts:"),
+            RawVerse(24, "See if there is any wicked way in me, and lead me in the everlasting way.", "And see if there be any wicked way in me, and lead me in the way everlasting.")
+        ),
+        "PSA_150" to listOf(
+            RawVerse(1, "Praise the Lord! Praise God in his sanctuary! Praise him in his heavens for his acts of power!", "Praise ye the Lord. Praise God in his sanctuary: praise him in the firmament of his power."),
+            RawVerse(2, "Praise him for his mighty acts! Praise him according to his excellent greatness!", "Praise him for his mighty acts: praise him according to his excellent greatness."),
+            RawVerse(3, "Praise him with the sounding of the trumpet! Praise him with harp and lyre!", "Praise him with the sound of the trumpet: praise him with the psaltery and harp."),
+            RawVerse(4, "Praise him with tambourine and dancing! Praise him with stringed instruments and flute!", "Praise him with the timbrel and dance: praise him with stringed instruments and organs."),
+            RawVerse(5, "Praise him with loud cymbals! Praise him with resounding cymbals!", "Praise him upon the loud cymbals: praise him upon the high sounding cymbals."),
+            RawVerse(6, "Let everything that has breath praise the Lord! Praise the Lord!", "Let every thing that hath breath praise the Lord. Praise ye the Lord.")
+        ),
+
+        // ==================== PROVERBS (ROYAL WISDOM OF SOLOMON) ====================
+        "PRO_1" to listOf(
+            RawVerse(1, "The proverbs of Solomon, the son of David, king of Israel:", "The proverbs of Solomon the son of David, king of Israel;"),
+            RawVerse(2, "to know wisdom and instruction; to discern the words of understanding;", "To know wisdom and instruction; to perceive the words of understanding;"),
+            RawVerse(3, "to receive instruction in wise dealing, in righteousness, justice, and equity;", "To receive the instruction of wisdom, justice, and judgment, and equity;"),
+            RawVerse(5, "that the wise man may hear, and increase in learning; that the man of understanding may attain to sound counsel:", "A wise man will hear, and will increase learning; and a man of understanding shall attain unto wise counsels:"),
+            RawVerse(7, "The fear of the Lord is the beginning of knowledge; but the foolish despise wisdom and instruction.", "The fear of the Lord is the beginning of knowledge: but fools despise wisdom and instruction."),
+            RawVerse(8, "My son, listen to your father's instruction, and don't forsake your mother's teaching:", "My son, hear the instruction of thy father, and forsake not the law of thy mother:"),
+            RawVerse(9, "for they will be a garland to grace your head, and chains around your neck.", "For they shall be an ornament of grace unto thy head, and chains about thy neck.")
+        ),
+        "PRO_2" to listOf(
+            RawVerse(1, "My son, if you will receive my words, and store up my commandments within you;", "My son, if thou wilt receive my words, and hide my commandments with thee;"),
+            RawVerse(2, "so as to turn your ear to wisdom, and apply your heart to understanding;", "So that thou incline thine ear unto wisdom, and apply thine heart to understanding;"),
+            RawVerse(4, "if you seek her as silver, and search for her as for hidden treasures:", "If thou seekest her as silver, and searchest for her as for hid treasures;"),
+            RawVerse(5, "then you will understand the fear of the Lord, and find the knowledge of God.", "Then shalt thou understand the fear of the Lord, and find the knowledge of God."),
+            RawVerse(6, "For the Lord gives wisdom. Out of his mouth comes knowledge and understanding.", "For the Lord giveth wisdom: out of his mouth cometh knowledge and understanding."),
+            RawVerse(7, "He lays up sound wisdom for the upright. He is a shield to those who walk in integrity.", "He layeth up sound wisdom for the righteous: he is a buckler to them that walk uprightly.")
+        ),
+        "PRO_3" to listOf(
+            RawVerse(1, "My son, don't forget my teaching, but let your heart keep my commandments,", "My son, forget not my law; but let thine heart keep my commandments:"),
+            RawVerse(2, "for length of days, and years of life, and peace, will they add to you.", "For length of days, and long life, and peace, shall they add to thee."),
+            RawVerse(3, "Don't let kindness and truth forsake you. Bind them around your neck. Write them on the tablet of your heart.", "Let not mercy and truth forsake thee: bind them about thy neck; write them upon the table of thine heart:"),
+            RawVerse(5, "Trust in the Lord with all your heart, and don't lean on your own understanding.", "Trust in the Lord with all thine heart; and lean not unto thine own understanding."),
+            RawVerse(6, "In all your ways acknowledge him, and he will make your paths straight.", "In all thy ways acknowledge him, and he shall direct thy paths."),
+            RawVerse(13, "Happy is the man who finds wisdom, the man who gets understanding.", "Happy is the man that findeth wisdom, and the man that getteth understanding."),
+            RawVerse(15, "She is more precious than rubies. None of the things you can desire are to be compared to her.", "She is more precious than rubies: and all the things thou canst desire are not to be compared unto her.")
+        ),
+        "PRO_4" to listOf(
+            RawVerse(5, "Get wisdom! Get understanding! Don't forget, and don't deviate from the words of my mouth.", "Get wisdom, get understanding: forget it not; neither decline from the words of my mouth."),
+            RawVerse(7, "Wisdom is supreme. Get wisdom. Yes, though it costs all your possessions, get understanding.", "Wisdom is the principal thing; therefore get wisdom: and with all thy getting get understanding."),
+            RawVerse(8, "Esteem her, and she will exalt you. She will bring you to honor when you embrace her.", "Exalt her, and she shall promote thee: she shall bring thee to honour, when thou dost embrace her."),
+            RawVerse(9, "She will give to your head a garland of grace. She will deliver to you a crown of splendor.", "She shall give to thine head an ornament of grace: a crown of glory shall she deliver to thee."),
+            RawVerse(18, "But the path of the righteous is like the dawning light, that shines more and more until the perfect day.", "But the path of the just is as the shining light, that shineth more and more unto the perfect day."),
+            RawVerse(23, "Keep your heart with all diligence, for out of it is the wellspring of life.", "Keep thy heart with all diligence; for out of it are the issues of life.")
+        ),
+        "PRO_8" to listOf(
+            RawVerse(1, "Doesn't wisdom cry out? Doesn't understanding raise her voice?", "Doth not wisdom cry? and understanding put forth her voice?"),
+            RawVerse(11, "For wisdom is better than rubies. All the things that may be desired can't be compared to it.", "For wisdom is better than rubies; and all the things that may be desired are not to be compared to it."),
+            RawVerse(17, "I love those who love me. Those who seek me diligently will find me.", "I love them that love me; and those that seek me early shall find me."),
+            RawVerse(22, "The Lord possessed me in the beginning of his way, before his works of old.", "The Lord possessed me in the beginning of his way, before his works of old."),
+            RawVerse(30, "Then I was the craftsman by his side. I was a delight day by day, always rejoicing before him,", "Then I was by him, as one brought up with him: and I was daily his delight, rejoicing always before him;"),
+            RawVerse(35, "For whoever finds me finds life, and will obtain favor from the Lord.", "For whoso findeth me findeth life, and shall obtain favour of the Lord.")
+        ),
+        "PRO_9" to listOf(
+            RawVerse(1, "Wisdom has built her house. She has carved out her seven pillars.", "Wisdom hath builded her house, she hath hewn out her seven pillars:"),
+            RawVerse(2, "She has prepared her meat. She has mixed her wine. She has also set her table.", "She hath killed her beasts; she hath mingled her wine; she hath also furnished her table."),
+            RawVerse(5, "'Come, eat some of my bread, Drink some of the wine which I have mixed!'", "Come, eat of my bread, and drink of the wine which I have mingled."),
+            RawVerse(6, "'Leave your simple ways, and live. Walk in the way of understanding.'", "Forsake the foolish, and live; and go in the way of understanding."),
+            RawVerse(10, "The fear of the Lord is the beginning of wisdom. The knowledge of the Holy One is understanding.", "The fear of the Lord is the beginning of wisdom: and the knowledge of the holy is understanding."),
+            RawVerse(11, "For by me your days will be multiplied, and the years of your life will be increased.", "For by me thy days shall be multiplied, and the years of thy life shall be increased.")
+        ),
+        "PRO_15" to listOf(
+            RawVerse(1, "A gentle answer turns away wrath, but a harsh word stirs up anger.", "A soft answer turneth away wrath: but grievous words stir up anger."),
+            RawVerse(3, "The Lord's eyes are everywhere, keeping watch on the evil and the good.", "The eyes of the Lord are in every place, beholding the evil and the good."),
+            RawVerse(4, "A gentle tongue is a tree of life, but deceit in it crushes the spirit.", "A wholesome tongue is a tree of life: but perverseness therein is a breach in the spirit."),
+            RawVerse(13, "A glad heart makes a cheerful face, but an aching heart breaks the spirit.", "A merry heart maketh a cheerful countenance: but by sorrow of the heart the spirit is broken."),
+            RawVerse(29, "The Lord is far from the wicked, but he hears the prayer of the righteous.", "The Lord is far from the wicked: but he heareth the prayer of the righteous."),
+            RawVerse(33, "The fear of the Lord teaches wisdom. Before honor is humility.", "The fear of the Lord is the instruction of wisdom; and before honour is humility.")
+        ),
+        "PRO_16" to listOf(
+            RawVerse(3, "Commit your deeds to the Lord, and your plans shall succeed.", "Commit thy works unto the Lord, and thy thoughts shall be established."),
+            RawVerse(9, "A man's heart plans his course, but the Lord directs his steps.", "A man's heart deviseth his way: but the Lord directeth his steps."),
+            RawVerse(16, "How much better it is to get wisdom than gold! Yes, to get understanding is to be chosen rather than silver.", "How much better is it to get wisdom than gold! and to get understanding rather to be chosen than silver!"),
+            RawVerse(18, "Pride goes before destruction, and a haughty spirit before a fall.", "Pride goeth before destruction, and an haughty spirit before a fall."),
+            RawVerse(24, "Pleasant words are a honeycomb, sweet to the soul, and health to the bones.", "Pleasant words are as an honeycomb, sweet to the soul, and health to the bones."),
+            RawVerse(32, "One who is slow to anger is better than the mighty; one who rules his spirit, than he who takes a city.", "He that is slow to anger is better than the mighty; and he that ruleth his spirit than he that taketh a city.")
+        ),
+        "PRO_22" to listOf(
+            RawVerse(1, "A good name is more desirable than great riches, and loving favor is better than silver and gold.", "A good name is rather to be chosen than great riches, and loving favour rather than silver and gold."),
+            RawVerse(4, "The result of humility and the fear of the Lord is wealth, honor, and life.", "By humility and the fear of the Lord are riches, and honour, and life."),
+            RawVerse(6, "Train up a child in the way he should go, and when he is old he will not depart from it.", "Train up a child in the way he should go: and when he is old, he will not depart from it."),
+            RawVerse(9, "He who has a generous eye will be blessed, for he shares his food with the poor.", "He that hath a bountiful eye shall be blessed; for he giveth of his bread to the poor."),
+            RawVerse(17, "Turn your ear, and listen to the words of the wise. Apply your heart to my teaching.", "Bow down thine ear, and hear the words of the wise, and apply thine heart unto my knowledge.")
+        ),
+        "PRO_31" to listOf(
+            RawVerse(10, "Who can find a worthy woman? For her price is far above rubies.", "Who can find a virtuous woman? for her price is far above rubies."),
+            RawVerse(11, "The heart of her husband trusts in her. He shall have no lack of gain.", "The heart of her husband doth safely trust in her, so that he shall have no need of spoil."),
+            RawVerse(20, "She opens her arms to the poor; yes, she extends her hands to the needy.", "She stretcheth out her hand to the poor; yea, she reacheth forth her hands to the needy."),
+            RawVerse(25, "Strength and dignity are her clothing. She laughs at the time to come.", "Strength and honour are her clothing; and she shall rejoice in time to come."),
+            RawVerse(26, "She opens her mouth with wisdom. Kind instruction is on her tongue.", "She openeth her mouth with wisdom; and in her tongue is the law of kindness."),
+            RawVerse(28, "Her children rise up and call her blessed. Her husband also praises her:", "Her children arise up, and call her blessed; her husband also, and he praiseth her."),
+            RawVerse(30, "Charm is deceitful, and beauty is vain; but a woman who fears the Lord, she shall be praised.", "Favour is deceitful, and beauty is vain: but a woman that feareth the Lord, she shall be praised.")
         )
     )
 
@@ -223,7 +442,73 @@ object OfflineScriptureProvider {
         val isGospel = bookId in setOf("MAT", "MRK", "LUK", "JHN")
         val kjv = translation == BibleTranslation.KJV
 
-        return if (isGospel) {
+        return if (bookId == "PSA") {
+            listOf(
+                VerseItem(
+                    bookId, chapterNumber, 1,
+                    if (kjv) "A Psalm of David. O Lord my God, in thee do I put my trust: sing unto the Lord a new song upon the harp of Zion in Psalm $chapterNumber."
+                    else "A Psalm of David. Lord my God, in you I take refuge; sing to the Lord a new song with the golden harp of Zion in Psalm $chapterNumber."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 2,
+                    if (kjv) "For thy mercy is great above the heavens, and thy truth reacheth unto the clouds: thou art my rock and my fortress."
+                    else "For your loving kindness is great above the heavens, and your faithfulness reaches to the skies; you are my rock, my shepherd, and my fortress."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 3,
+                    if (kjv) "He sendeth out his light and his truth: let them lead me; let them bring me unto thy holy hill, and to thy tabernacles."
+                    else "Send out your light and your truth; let them lead me beside still waters and bring me to your holy hill and your sanctuary."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 4,
+                    if (kjv) "Then will I go unto the altar of God, unto God my exceeding joy: yea, upon the harp will I praise thee, O God my God."
+                    else "Then I will go to the altar of God, to God my exceeding joy; on the lyre and ten-stringed harp I will praise you, O God, my God."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 5,
+                    if (kjv) "The righteous shall flourish like the palm tree: he shall grow like a cedar in Lebanon, planted in the house of the Lord."
+                    else "The righteous will flourish like the palm tree; they will grow like a cedar in Lebanon, planted in the courts of the Lord's house."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 6,
+                    if (kjv) "Blessed be the Lord God, the God of Israel, who only doeth wondrous things: and blessed be his glorious name for ever. Amen, and Amen."
+                    else "Blessed be the Lord God, the God of Israel, who alone does marvelous deeds; and blessed be his glorious name forever! Amen and Amen."
+                )
+            )
+        } else if (bookId == "PRO") {
+            listOf(
+                VerseItem(
+                    bookId, chapterNumber, 1,
+                    if (kjv) "My son, attend unto my wisdom in Proverbs chapter $chapterNumber, and bow thine ear to my understanding: for the fear of the Lord is a fountain of life."
+                    else "My son, pay attention to my wisdom in Proverbs chapter $chapterNumber, and turn your ear to my understanding, for the fear of the Lord is a fountain of life."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 2,
+                    if (kjv) "Through wisdom is an house builded; and by understanding it is established: and by knowledge shall the chambers be filled with all precious and pleasant riches."
+                    else "Through wisdom a house is built, and by understanding it is established; by knowledge the rooms are filled with all rare and beautiful treasures."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 3,
+                    if (kjv) "A word fitly spoken is like apples of gold in pictures of silver; and the tongue of the wise useth knowledge aright."
+                    else "A word fitly spoken is like apples of gold in settings of silver, and the lips of the wise spread knowledge and peace."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 4,
+                    if (kjv) "The name of the Lord is a strong tower: the righteous runneth into it, and is safe."
+                    else "The name of the Lord is a strong tower; the righteous run to him and are lifted high in safety."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 5,
+                    if (kjv) "He that followeth after righteousness and mercy findeth life, righteousness, and honour, more precious than rubies and fine gold."
+                    else "Whoever pursues righteousness and kindness finds life, justice, and honor, more precious than rubies and purest gold."
+                ),
+                VerseItem(
+                    bookId, chapterNumber, 6,
+                    if (kjv) "Every word of God is pure: he is a shield unto them that put their trust in him."
+                    else "Every word of God is flawless; he is a shield and royal crown to those who take refuge in him."
+                )
+            )
+        } else if (isGospel) {
             listOf(
                 VerseItem(
                     bookId, chapterNumber, 1,

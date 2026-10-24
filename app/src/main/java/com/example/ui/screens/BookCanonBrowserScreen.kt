@@ -110,12 +110,12 @@ fun BookCanonBrowserScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = "The New Testament Canon",
+                    text = "The Sacred Canon",
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "27 Sacred Books • 260 Illustrated Chapters",
+                    text = "29 Sacred Books • 441 Illustrated Chapters (New Testament, Psalms & Proverbs)",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -123,7 +123,7 @@ fun BookCanonBrowserScreen(
                 com.example.ui.components.SanctuarySearchField(
                     query = searchQuery,
                     onQueryChange = onSearchQueryChange,
-                    placeholderText = "Search books, authors, or theological themes…",
+                    placeholderText = "Search Psalms, Proverbs, Gospels, Epistles, or authors…",
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("canon_search_input")
@@ -138,7 +138,7 @@ fun BookCanonBrowserScreen(
                         FilterChip(
                             selected = selectedCategory == null,
                             onClick = { onCategorySelected(null) },
-                            label = { Text("All 27 Books") },
+                            label = { Text("All 29 Books") },
                             modifier = Modifier.testTag("category_chip_all")
                         )
                     }
@@ -347,8 +347,14 @@ private fun BookCanonCard(
                     }
                 }
 
-                // Expandable Visual Chapter Art Grid
+                // Expandable Visual Chapter Art Grid (paginated in 30-chapter chunks for large books like Psalms)
                 AnimatedVisibility(visible = isExpanded) {
+                    val pageSize = 30
+                    val totalPages = (book.chapterCount + pageSize - 1) / pageSize
+                    var selectedPage by remember(book.id) { mutableStateOf(0) }
+                    val startCh = selectedPage * pageSize + 1
+                    val endCh = minOf(book.chapterCount, (selectedPage + 1) * pageSize)
+
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -362,13 +368,33 @@ private fun BookCanonCard(
                             color = MaterialTheme.colorScheme.primary
                         )
 
+                        if (totalPages > 1) {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .testTag("chapter_range_pills_${book.id}")
+                            ) {
+                                items(totalPages) { pageIdx ->
+                                    val pStart = pageIdx * pageSize + 1
+                                    val pEnd = minOf(book.chapterCount, (pageIdx + 1) * pageSize)
+                                    FilterChip(
+                                        selected = selectedPage == pageIdx,
+                                        onClick = { selectedPage = pageIdx },
+                                        label = { Text("Ch $pStart–$pEnd") },
+                                        modifier = Modifier.testTag("chapter_range_${book.id}_$pageIdx")
+                                    )
+                                }
+                            }
+                        }
+
                         FlowRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             maxItemsInEachRow = 2
                         ) {
-                            (1..book.chapterCount).forEach { chNum ->
+                            (startCh..endCh).forEach { chNum ->
                                 val chMeta = remember(book.id, chNum) {
                                     ChapterArtRegistry.getChapterMetadata(book.id, chNum)
                                 }

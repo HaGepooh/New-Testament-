@@ -146,7 +146,55 @@ object ChapterArtRegistry {
         "REV_15" to ChapterSeed("The Sea of Glass Mixed with Fire", "The Song of Moses and the Lamb", SceneArchetype.THRONE_AND_RAINBOW, "Praise", "Great and marvelous are your works, Lord God, the Almighty!", "A shimmering sea of crystal glass mingled with golden fire reflects heavenly harps."),
         "REV_19" to ChapterSeed("Hallelujah! The Marriage Supper of the Lamb", "King of Kings and Lord of Lords", SceneArchetype.THRONE_AND_RAINBOW, "Triumph", "Hallelujah! For the Lord our God, the Almighty, reigns!", "Heavens open in royal crimson and gold for the wedding feast of the King of Kings."),
         "REV_21" to ChapterSeed("The New Heaven & The New Jerusalem", "Twelve Gates of Pearl & No More Tears", SceneArchetype.NEW_JERUSALEM_TREE, "New Creation", "He will wipe away every tear from their eyes. Death will be no more.", "The holy city New Jerusalem descends like a jeweled bride in jasper, sapphire, emerald, and pure gold."),
-        "REV_22" to ChapterSeed("The River of Water of Life & Tree of Life", "Come, Lord Jesus!", SceneArchetype.NEW_JERUSALEM_TREE, "Eternity", "The Spirit and the bride say, 'Come!' He who hears, let him say, 'Come!'", "A crystal-clear River of Life flows from the throne between the twelve-fruited Tree of Life in eternal day.")
+        "REV_22" to ChapterSeed("The River of Water of Life & Tree of Life", "Come, Lord Jesus!", SceneArchetype.NEW_JERUSALEM_TREE, "Eternity", "The Spirit and the bride say, 'Come!' He who hears, let him say, 'Come!'", "A crystal-clear River of Life flows from the throne between the twelve-fruited Tree of Life in eternal day."),
+
+        // PSALMS (150) — CURATED HIGHLIGHTS
+        "PSA_1" to ChapterSeed("The Tree Planted by Rivers of Water", "Delighting in the Law of the Lord Day & Night", SceneArchetype.DAVID_HARP_PASTURES, "Blessedness", "He shall be like a tree planted by the rivers of water, that brings forth its fruit in its season.", "A flourishing 3D cedar and olive tree spreads golden-emerald branches beside crystal streams of living water."),
+        "PSA_8" to ChapterSeed("How Excellent Is Your Name in All the Earth", "Crowned with Glory and Honor Under the Starry Heavens", SceneArchetype.DAVID_HARP_PASTURES, "Majesty", "When I consider your heavens, the work of your fingers, the moon and the stars, which you have ordained.", "King David lifts his golden harp beneath a radiant 3D canopy of galaxies, moonbeams, and sapphire stars."),
+        "PSA_19" to ChapterSeed("The Heavens Declare the Glory of God", "More to Be Desired Than Gold & Sweeter Than Honey", SceneArchetype.DAVID_HARP_PASTURES, "Creation & Word", "The heavens declare the glory of God. The expanse shows his handiwork.", "A blazing golden sun rises over emerald hills while an illuminated scroll glows sweeter than golden honeycomb."),
+        "PSA_23" to ChapterSeed("The Lord Is My Shepherd — Green Pastures & Still Waters", "Restoring the Soul & The Cup Running Over", SceneArchetype.DAVID_HARP_PASTURES, "Shepherd", "The Lord is my shepherd; I shall not want. He makes me to lie down in green pastures: he leads me beside the still waters.", "King David and the Good Shepherd stand beside mirror-calm turquoise waters, lush green pastures, and an overflowing golden chalice."),
+        "PSA_24" to ChapterSeed("Lift Up Your Heads, O Ye Gates!", "The King of Glory Enters Mount Zion", SceneArchetype.TEMPLE_SOLOMON_PORCH, "King of Glory", "Lift up your heads, O ye gates; and be ye lift up, ye everlasting doors; and the King of glory shall come in.", "Towering golden-arched gates of Mount Zion swing open before the blazing radiance of the King of Glory."),
+        "PSA_27" to ChapterSeed("The Lord Is My Light and My Salvation", "Beholding the Beauty of the Lord in His Temple", SceneArchetype.DAVID_HARP_PASTURES, "Confidence", "The Lord is my light and my salvation; whom shall I fear? the Lord is the strength of my life.", "A fortress of golden light and sanctuary lampstands shelter the psalmist against every shadow."),
+        "PSA_34" to ChapterSeed("O Taste and See That the Lord Is Good", "The Angel of the Lord Encamps Around Those Who Fear Him", SceneArchetype.DAVID_HARP_PASTURES, "Deliverance", "O taste and see that the Lord is good: blessed is the man that trusts in him.", "Luminous angelic wings of gold and sapphire encircle the humble in radiant protection."),
+        "PSA_42" to ChapterSeed("As the Deer Pants for the Water Brooks", "Deep Calls Unto Deep & Hope in God", SceneArchetype.DAVID_HARP_PASTURES, "Longing", "As the hart pants after the water brooks, so pants my soul after you, O God.", "Crystal mountain waterfalls cascade into a turquoise stream beneath the light of God's countenance."),
+        "PSA_46" to ChapterSeed("God Is Our Refuge and Strength", "Be Still, and Know That I Am God", SceneArchetype.DAVID_HARP_PASTURES, "Refuge", "God is our refuge and strength, a very present help in trouble.", "A serene river gladdens the holy city of God while mountains and tempestuous waters bow in stillness."),
+        "PSA_51" to ChapterSeed("Create in Me a Clean Heart, O God", "Purged with Hyssop & Washed Whiter Than Snow", SceneArchetype.DAVID_HARP_PASTURES, "Repentance", "Create in me a clean heart, O God; and renew a right spirit within me.", "King David bows beside his golden harp as pure white-gold grace descends from heaven."),
+        "PSA_91" to ChapterSeed("Under the Shadow of the Almighty", "Covered with His Feathers & Guarded by Angels", SceneArchetype.THRONE_AND_RAINBOW, "Protection", "He that dwells in the secret place of the most High shall abide under the shadow of the Almighty.", "Majestic golden wings of refuge and guardian angels shield the faithful along the rocky heights."),
+        "PSA_100" to ChapterSeed("Enter into His Gates with Thanksgiving", "Make a Joyful Noise Unto the Lord, All Ye Lands", SceneArchetype.TEMPLE_SOLOMON_PORCH, "Thanksgiving", "Enter into his gates with thanksgiving, and into his courts with praise.", "Levitical choirs with golden harps and cymbals celebrate before the sunlit courts of Zion."),
+        "PSA_103" to ChapterSeed("Bless the Lord, O My Soul", "Youth Renewed Like the Eagle's & Mercy from Everlasting", SceneArchetype.DAVID_HARP_PASTURES, "Mercy", "Bless the Lord, O my soul: and all that is within me, bless his holy name.", "High above sunlit clouds, a golden eagle soars across an infinite horizon of mercy."),
+        "PSA_119" to ChapterSeed("Thy Word Is a Lamp Unto My Feet", "A Light Unto My Path & Sweeter Than Honey", SceneArchetype.SCROLL_AND_LAMP, "Sacred Word", "Your word is a lamp unto my feet, and a light unto my path.", "An ornate 3D golden oil lamp and unrolled Torah scroll illuminate a stone pathway through the night."),
+        "PSA_121" to ChapterSeed("I Will Lift Up Mine Eyes Unto the Hills", "My Help Comes from the Lord Who Made Heaven and Earth", SceneArchetype.DAVID_HARP_PASTURES, "Pilgrim Song", "I will lift up mine eyes unto the hills, from whence comes my help.", "Sunlit Judean mountains rise toward a watchful sapphire sky that neither slumbers nor sleeps."),
+        "PSA_139" to ChapterSeed("Fearfully and Wonderfully Made", "Search Me, O God, and Lead Me in the Way Everlasting", SceneArchetype.DAVID_HARP_PASTURES, "Omniscience", "I will praise you; for I am fearfully and wonderfully made: marvellous are your works.", "Wings of the morning and starlit oceans glow with the intimate presence of the Creator."),
+        "PSA_150" to ChapterSeed("Let Everything That Has Breath Praise the Lord", "Grand Symphony of Trumpet, Psaltery, Harp & Cymbals", SceneArchetype.DAVID_HARP_PASTURES, "Hallelujah", "Let every thing that has breath praise the Lord. Praise ye the Lord.", "A dazzling 3D celestial orchestra of golden harps, silver trumpets, and sanctuary cymbals resounds in praise."),
+
+        // PROVERBS (31) — CURATED HIGHLIGHTS
+        "PRO_1" to ChapterSeed("The Fear of the Lord Is the Beginning of Knowledge", "A Graceful Ornament & Chains of Gold", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Beginning of Wisdom", "The fear of the Lord is the beginning of knowledge: but fools despise wisdom and instruction.", "King Solomon's golden palace arches open upon a glowing scroll and jeweled crown of instruction."),
+        "PRO_2" to ChapterSeed("Seeking Wisdom as Silver & Hidden Treasures", "The Lord Gives Wisdom Out of His Mouth", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Discernment", "For the Lord gives wisdom: out of his mouth comes knowledge and understanding.", "A chest of gleaming gold, silver, and sapphires shines beneath the lamp of divine understanding."),
+        "PRO_3" to ChapterSeed("Trust in the Lord with All Your Heart", "She Is a Tree of Life to Those Who Lay Hold Upon Her", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Trust & Guidance", "Trust in the Lord with all your heart; and lean not unto your own understanding. In all your ways acknowledge him, and he shall direct your paths.", "A straight golden pathway leads through marble pillars toward a luminous Tree of Life."),
+        "PRO_4" to ChapterSeed("Keep Your Heart with All Diligence", "The Path of the Just Is as the Shining Light", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Guarded Heart", "Keep your heart with all diligence; for out of it are the issues of life.", "Dawn light grows brighter and brighter unto the perfect day over Solomon's royal court."),
+        "PRO_8" to ChapterSeed("Eternal Wisdom Beside the Master Workman", "Rejoicing Before Him Always Since the Foundation of the Earth", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Eternal Wisdom", "The Lord possessed me in the beginning of his way, before his works of old.", "Cosmic golden compasses inscribe the circle of the deep beneath the radiant crown of Wisdom."),
+        "PRO_9" to ChapterSeed("Wisdom Has Built Her House & Hewn Out Seven Pillars", "The Banquet of Understanding & Fountain of Life", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Seven Pillars", "Wisdom has built her house, she has hewn out her seven pillars.", "Seven sculpted 3D marble and gold-leaf pillars frame a royal banquet table bathed in amber light."),
+        "PRO_15" to ChapterSeed("A Soft Answer Turns Away Wrath", "The Eyes of the Lord Are in Every Place", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Gentle Speech", "A soft answer turns away wrath: but grievous words stir up anger.", "Gentle olive branches and a tranquil fountain reflect golden light within a peaceful courtyard."),
+        "PRO_16" to ChapterSeed("Pleasant Words Are as a Honeycomb", "Commit Your Works Unto the Lord", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Sovereignty", "Pleasant words are as an honeycomb, sweet to the soul, and health to the bones.", "Golden honeycomb and balanced royal scales of justice gleam beside Solomon's throne."),
+        "PRO_22" to ChapterSeed("A Good Name Is Rather to Be Chosen Than Great Riches", "Train Up a Child in the Way He Should Go", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Integrity", "A good name is rather to be chosen than great riches, and loving favour rather than silver and gold.", "An illuminated scroll of honor and a flourishing young olive sapling stand in warm sunlight."),
+        "PRO_31" to ChapterSeed("The Woman of Noble Character — Far Above Rubies", "Strength and Honor Are Her Clothing", SceneArchetype.SOLOMON_WISDOM_PILLARS, "Virtuous Wisdom", "Who can find a virtuous woman? for her price is far above rubies. Strength and honour are her clothing.", "Faceted crimson rubies, royal purple silk, and a never-extinguished golden lamp crown the book of Proverbs.")
+    )
+
+    private val psalmsArchetypeCycle = listOf(
+        SceneArchetype.DAVID_HARP_PASTURES,
+        SceneArchetype.GOOD_SHEPHERD,
+        SceneArchetype.TEMPLE_SOLOMON_PORCH,
+        SceneArchetype.THRONE_AND_RAINBOW,
+        SceneArchetype.SCROLL_AND_LAMP,
+        SceneArchetype.ASCENSION_CLOUDS
+    )
+
+    private val proverbsArchetypeCycle = listOf(
+        SceneArchetype.SOLOMON_WISDOM_PILLARS,
+        SceneArchetype.SCROLL_AND_LAMP,
+        SceneArchetype.TEMPLE_SOLOMON_PORCH,
+        SceneArchetype.NEW_JERUSALEM_TREE,
+        SceneArchetype.THRONE_AND_RAINBOW
     )
 
     private val gospelArchetypeCycle = listOf(
@@ -274,6 +322,8 @@ object ChapterArtRegistry {
 
     private fun selectArchetypeForChapter(book: BookInfo, chapter: Int): SceneArchetype {
         return when (book.id) {
+            "PSA" -> if (chapter % 2 == 1) SceneArchetype.DAVID_HARP_PASTURES else psalmsArchetypeCycle[chapter % psalmsArchetypeCycle.size]
+            "PRO" -> if (chapter % 2 == 1) SceneArchetype.SOLOMON_WISDOM_PILLARS else proverbsArchetypeCycle[chapter % proverbsArchetypeCycle.size]
             "MAT", "MRK", "LUK", "JHN" -> gospelArchetypeCycle[(chapter + book.id[0].code) % gospelArchetypeCycle.size]
             "ACT" -> actsArchetypeCycle[chapter % actsArchetypeCycle.size]
             "REV" -> revelationArchetypeCycle[chapter % revelationArchetypeCycle.size]
@@ -282,6 +332,27 @@ object ChapterArtRegistry {
     }
 
     private fun generateChapterTitle(book: BookInfo, chapter: Int, archetype: SceneArchetype): String {
+        if (book.id == "PSA") {
+            val psalmMotifs = listOf(
+                "Harp of David & Still Waters of Grace",
+                "Fortress of Zion & Shield of Faith",
+                "Sanctuary Praise & Morning Mercy",
+                "Wings of Refuge & Song of Deliverance",
+                "Starlit Heavens & Unfailing Covenant",
+                "Living Streams & Joy in His Presence"
+            )
+            return "Psalm $chapter: ${psalmMotifs[chapter % psalmMotifs.size]}"
+        }
+        if (book.id == "PRO") {
+            val proverbMotifs = listOf(
+                "Seven Pillars of Royal Wisdom",
+                "Crown of Understanding & Fountain of Life",
+                "Path of the Just & Lamp of Truth",
+                "Scales of Justice & Honeycomb Words",
+                "Treasures More Precious Than Rubies"
+            )
+            return "Proverbs $chapter: ${proverbMotifs[chapter % proverbMotifs.size]}"
+        }
         val chapterThemes = when (book.id) {
             "MRK" -> mapOf(
                 3 to "The Twelve Appointed & House Divided",

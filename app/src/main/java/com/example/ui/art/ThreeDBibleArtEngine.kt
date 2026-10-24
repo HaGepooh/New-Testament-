@@ -47,7 +47,9 @@ enum class ThreeDEnvironmentStage(val label: String) {
     AREOPAGUS_MARBLE_COURT_3D("3D Classical Colonnade & Altar"),
     PATMOS_RAINBOW_THRONE_3D("3D Emerald Rainbow Throne & Seven Lamps"),
     SYCHAR_STONE_WELL_3D("3D Jacob's Stone Well & Terracotta Amphora"),
-    NEW_JERUSALEM_CRYSTAL_GATES_3D("3D New Jerusalem Jasper Gates & River of Life")
+    NEW_JERUSALEM_CRYSTAL_GATES_3D("3D New Jerusalem Jasper Gates & River of Life"),
+    PSALM_GREEN_PASTURES_HARP_3D("3D Green Pastures, Still Waters & Golden Harp of Zion"),
+    PROVERBS_SEVEN_PILLARS_PALACE_3D("3D Seven Pillars of Solomon's Wisdom & Royal Court")
 }
 
 /**
@@ -227,6 +229,34 @@ enum class Verse3DPictureType(
         secondaryCharacterId = "LUKE",
         badgeLabel = "Sacred Codices",
         defaultStage = ThreeDEnvironmentStage.JERUSALEM_TEMPLE_COLONNADE_3D
+    ),
+    PSALM_DAVID_HARP_WORSHIP_3D(
+        title = "King David & Asaph Singing Upon the Golden Harp",
+        primaryCharacterId = "KING_DAVID",
+        secondaryCharacterId = "ASAPH_MUSICIAN",
+        badgeLabel = "Psalms of Zion",
+        defaultStage = ThreeDEnvironmentStage.PSALM_GREEN_PASTURES_HARP_3D
+    ),
+    PSALM_SHEPHERD_STILL_WATERS_3D(
+        title = "David & The Good Shepherd Beside Still Waters",
+        primaryCharacterId = "KING_DAVID",
+        secondaryCharacterId = "JESUS",
+        badgeLabel = "Green Pastures",
+        defaultStage = ThreeDEnvironmentStage.PSALM_GREEN_PASTURES_HARP_3D
+    ),
+    PROVERBS_SOLOMON_ROYAL_WISDOM_3D(
+        title = "King Solomon & Lady Wisdom in the Seven-Pillared Court",
+        primaryCharacterId = "KING_SOLOMON",
+        secondaryCharacterId = "LADY_WISDOM",
+        badgeLabel = "Royal Proverbs",
+        defaultStage = ThreeDEnvironmentStage.PROVERBS_SEVEN_PILLARS_PALACE_3D
+    ),
+    PROVERBS_SEVEN_PILLARS_TREASURE_3D(
+        title = "Lady Wisdom Bearing Rubies & The Lamp of Understanding",
+        primaryCharacterId = "LADY_WISDOM",
+        secondaryCharacterId = "KING_SOLOMON",
+        badgeLabel = "Wisdom & Rubies",
+        defaultStage = ThreeDEnvironmentStage.PROVERBS_SEVEN_PILLARS_PALACE_3D
     )
 }
 
@@ -316,6 +346,16 @@ object ThreeDBibleArtEngine {
 
         val stages = ThreeDEnvironmentStage.entries
         val baseStageIdx = abs(metadata.patternSeed + metadata.chapterNumber * 3) % stages.size
+        val primaryChapterStage = when (metadata.bookId) {
+            "PSA" -> ThreeDEnvironmentStage.PSALM_GREEN_PASTURES_HARP_3D
+            "PRO" -> ThreeDEnvironmentStage.PROVERBS_SEVEN_PILLARS_PALACE_3D
+            else -> stages[baseStageIdx % stages.size]
+        }
+        val primaryChapterPictureType = when (metadata.bookId) {
+            "PSA" -> Verse3DPictureType.PSALM_DAVID_HARP_WORSHIP_3D
+            "PRO" -> Verse3DPictureType.PROVERBS_SOLOMON_ROYAL_WISDOM_3D
+            else -> Verse3DPictureType.JESUS_TEACHING_3D
+        }
 
         return listOf(
             Chapter3DSceneSlide(
@@ -326,8 +366,8 @@ object ThreeDBibleArtEngine {
                 leadCharacter = pool[0],
                 companionCharacter = pool[1],
                 thirdCharacter = pool[2],
-                environmentStage = stages[baseStageIdx % stages.size],
-                pictureType = Verse3DPictureType.JESUS_TEACHING_3D
+                environmentStage = primaryChapterStage,
+                pictureType = primaryChapterPictureType
             ),
             Chapter3DSceneSlide(
                 slideIndex = 1,
@@ -558,14 +598,36 @@ object ThreeDBibleArtEngine {
             "leper", "shepherd", "sheep", "lamb", "lazarus", "martha", "bethany", "zacchaeus",
             "sycamore", "well", "water", "samaria", "nicodemus", "born", "centurion", "soldier",
             "cornelius", "lydia", "purple", "stephen", "moses", "elijah", "transfigur", "paul",
-            "damascus", "throne", "new jerusalem", "trumpet"
+            "damascus", "throne", "new jerusalem", "trumpet", "harp", "psalm", "psaltery",
+            "cymbal", "zion", "refuge", "pasture", "david", "solomon", "proverb", "wisdom",
+            "understanding", "rubies", "pillars", "honeycomb", "virtuous"
         )
         return keywords.any { t.contains(it) }
     }
 
     private fun matchPrimaryVerseStoryType(verse: VerseItem): Verse3DPictureType {
         val t = verse.text.lowercase()
+        if (verse.bookId == "PSA") {
+            return when {
+                t.contains("shepherd") || t.contains("pasture") || t.contains("still waters") || t.contains("deer") || t.contains("hart") ->
+                    Verse3DPictureType.PSALM_SHEPHERD_STILL_WATERS_3D
+                t.contains("harp") || t.contains("psaltery") || t.contains("sing") || t.contains("praise") || t.contains("cymbal") || verse.verseNumber % 2 == 1 ->
+                    Verse3DPictureType.PSALM_DAVID_HARP_WORSHIP_3D
+                else -> Verse3DPictureType.PSALM_SHEPHERD_STILL_WATERS_3D
+            }
+        }
+        if (verse.bookId == "PRO") {
+            return when {
+                t.contains("rubies") || t.contains("virtuous") || t.contains("pillars") || t.contains("treasure") || t.contains("silver") ->
+                    Verse3DPictureType.PROVERBS_SEVEN_PILLARS_TREASURE_3D
+                else -> Verse3DPictureType.PROVERBS_SOLOMON_ROYAL_WISDOM_3D
+            }
+        }
         return when {
+            t.contains("harp") || t.contains("psaltery") || t.contains("david") ->
+                Verse3DPictureType.PSALM_DAVID_HARP_WORSHIP_3D
+            t.contains("solomon") || t.contains("rubies") || t.contains("seven pillars") || t.contains("proverb") ->
+                Verse3DPictureType.PROVERBS_SOLOMON_ROYAL_WISDOM_3D
             t.contains("magi") || t.contains("frankincense") || t.contains("myrrh") || t.contains("east") || t.contains("herod") ->
                 Verse3DPictureType.WISE_MAGI_STAR_GIFTS_3D
             t.contains("lazarus") || t.contains("martha") || t.contains("bethany") ->
@@ -1373,6 +1435,108 @@ private fun DrawScope.drawDetailed3DEnvironmentStage(
                 )
             }
         }
+
+        ThreeDEnvironmentStage.PSALM_GREEN_PASTURES_HARP_3D -> {
+            // 3D Emerald Pastures of Bethlehem, Still Waters Stream & Sculpted Golden Harp Monument
+            val hill = Path().apply {
+                moveTo(0f, h * 0.58f)
+                quadraticTo(w * 0.28f, h * 0.42f, w * 0.55f, h * 0.56f)
+                quadraticTo(w * 0.82f, h * 0.44f, w, h * 0.55f)
+                lineTo(w, h * 0.76f)
+                lineTo(0f, h * 0.76f)
+                close()
+            }
+            drawPath(
+                path = hill,
+                brush = Brush.verticalGradient(
+                    listOf(Color(0xFF2FA875).copy(alpha = 0.82f), Color(0xFF1A5E46), Color(0xFF0B2B22)),
+                    startY = h * 0.42f,
+                    endY = h * 0.76f
+                )
+            )
+            // 3D Crystal Stream of Still Waters in center
+            val stream = Path().apply {
+                moveTo(w * 0.44f, h * 0.52f)
+                quadraticTo(w * 0.34f, h * 0.64f, w * 0.24f, h * 0.76f)
+                lineTo(w * 0.76f, h * 0.76f)
+                quadraticTo(w * 0.64f, h * 0.64f, w * 0.56f, h * 0.52f)
+                close()
+            }
+            drawPath(
+                path = stream,
+                brush = Brush.verticalGradient(
+                    listOf(Color(0xFF7CEEFF).copy(alpha = 0.88f), Color(0xFF1B7AA6), Color(0xFF0B3B59)),
+                    startY = h * 0.52f,
+                    endY = h * 0.76f
+                )
+            )
+            // Sculpted 3D Golden Harp Arch in upper center sky
+            val hx = w * 0.50f
+            val hy = h * 0.28f
+            val hr = min(w, h) * 0.14f
+            drawArc(
+                color = gold.copy(alpha = 0.70f),
+                startAngle = 20f,
+                sweepAngle = 140f,
+                useCenter = false,
+                topLeft = Offset(hx - hr, hy - hr * 0.8f),
+                size = Size(hr * 2f, hr * 1.4f),
+                style = Stroke(width = 4.5f, cap = StrokeCap.Round)
+            )
+            for (s in -2..2) {
+                val sx = hx + s * (hr * 0.28f)
+                drawLine(
+                    color = Color.White.copy(alpha = 0.48f),
+                    start = Offset(sx, hy - hr * 0.55f),
+                    end = Offset(sx, hy + hr * 0.45f),
+                    strokeWidth = 1.4f
+                )
+            }
+        }
+
+        ThreeDEnvironmentStage.PROVERBS_SEVEN_PILLARS_PALACE_3D -> {
+            // 3D Seven Hewn Marble & Gold Pillars of Solomon's Palace of Wisdom
+            drawRoundRect(
+                brush = Brush.verticalGradient(
+                    listOf(gold, Color(0xFFC88A1E), Color(0xFF6E470B)),
+                    startY = h * 0.06f,
+                    endY = h * 0.14f
+                ),
+                topLeft = Offset(w * 0.04f, h * 0.06f),
+                size = Size(w * 0.92f, h * 0.07f),
+                cornerRadius = CornerRadius(5f, 5f)
+            )
+            for (i in 0..6) {
+                val colX = w * (0.09f + i * 0.136f)
+                val colW = w * 0.048f
+                val alphaMod = if (i in 2..4) 0.65f else 0.92f
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        listOf(
+                            Color(0xFFFFFBF2).copy(alpha = alphaMod),
+                            Color(0xFFE6D6B8).copy(alpha = alphaMod),
+                            Color(0xFF7D6B4E).copy(alpha = alphaMod)
+                        ),
+                        startX = colX - colW * 0.5f,
+                        endX = colX + colW * 0.5f
+                    ),
+                    topLeft = Offset(colX - colW * 0.5f, h * 0.13f),
+                    size = Size(colW, h * 0.63f)
+                )
+                drawRoundRect(
+                    color = gold.copy(alpha = alphaMod),
+                    topLeft = Offset(colX - colW * 0.68f, h * 0.11f),
+                    size = Size(colW * 1.36f, h * 0.03f),
+                    cornerRadius = CornerRadius(3f, 3f)
+                )
+                drawRoundRect(
+                    color = gold.copy(alpha = alphaMod),
+                    topLeft = Offset(colX - colW * 0.68f, h * 0.73f),
+                    size = Size(colW * 1.36f, h * 0.03f),
+                    cornerRadius = CornerRadius(3f, 3f)
+                )
+            }
+        }
     }
 }
 
@@ -1402,7 +1566,8 @@ fun DrawScope.drawSculpted3DCharacterFigure(
         CharacterVisualStyle.MARY_MAGDALENE,
         CharacterVisualStyle.SAMARITAN_WOMAN_WELL,
         CharacterVisualStyle.MARTHA_AND_MARY_BETHANY,
-        CharacterVisualStyle.LYDIA_OF_THYATIRA
+        CharacterVisualStyle.LYDIA_OF_THYATIRA,
+        CharacterVisualStyle.LADY_WISDOM_VIRTUOUS
     )
     val isArchangel = style == CharacterVisualStyle.GABRIEL_ARCHANGEL ||
         style == CharacterVisualStyle.MICHAEL_ARCHANGEL
@@ -1699,13 +1864,29 @@ fun DrawScope.drawSculpted3DCharacterFigure(
             drawCircle(color = gold, radius = scale * 0.042f, center = Offset(cx, headCy - scale * 0.36f))
             drawCircle(color = gold, radius = scale * 0.042f, center = Offset(cx - scale * 0.52f, shoulderTopY + scale * 0.28f))
             drawCircle(color = gold, radius = scale * 0.042f, center = Offset(cx + scale * 0.52f, shoulderTopY + scale * 0.28f))
+        } else if (style == CharacterVisualStyle.LADY_WISDOM_VIRTUOUS) {
+            // Golden Royal Diadem with Faceted Ruby for Lady Wisdom / Virtuous Woman
+            drawArc(
+                color = gold,
+                startAngle = 200f,
+                sweepAngle = 140f,
+                useCenter = false,
+                topLeft = Offset(cx - scale * 0.32f, headCy - scale * 0.50f),
+                size = Size(scale * 0.64f, scale * 0.28f),
+                style = Stroke(width = 3.2f, cap = StrokeCap.Round)
+            )
+            drawCircle(color = Color(0xFFE01E48), radius = scale * 0.052f, center = Offset(cx, headCy - scale * 0.48f))
         }
-    } else if (style == CharacterVisualStyle.WISE_MAGI_KING) {
+    } else if (
+        style == CharacterVisualStyle.WISE_MAGI_KING ||
+        style == CharacterVisualStyle.KING_DAVID_PSALMIST ||
+        style == CharacterVisualStyle.KING_SOLOMON_WISDOM
+    ) {
         val crownPath = Path().apply {
             moveTo(cx - scale * 0.35f, headCy - scale * 0.22f)
             lineTo(cx - scale * 0.39f, headCy - scale * 0.58f)
             lineTo(cx - scale * 0.17f, headCy - scale * 0.40f)
-            lineTo(cx, headCy - scale * 0.66f)
+            lineTo(cx, headCy - scale * 0.68f)
             lineTo(cx + scale * 0.17f, headCy - scale * 0.40f)
             lineTo(cx + scale * 0.39f, headCy - scale * 0.58f)
             lineTo(cx + scale * 0.35f, headCy - scale * 0.22f)
@@ -1721,6 +1902,8 @@ fun DrawScope.drawSculpted3DCharacterFigure(
         )
         drawPath(crownPath, color = Color.White.copy(alpha = 0.8f), style = Stroke(width = 1.4f))
         drawCircle(color = Color(0xFFD91E48), radius = scale * 0.05f, center = Offset(cx, headCy - scale * 0.35f))
+        drawCircle(color = Color(0xFF1E88E5), radius = scale * 0.038f, center = Offset(cx - scale * 0.18f, headCy - scale * 0.33f))
+        drawCircle(color = Color(0xFF2EA86B), radius = scale * 0.038f, center = Offset(cx + scale * 0.18f, headCy - scale * 0.33f))
     } else if (style == CharacterVisualStyle.CORNELIUS_CENTURION) {
         drawArc(
             color = Color(0xFFD92638),
@@ -2077,6 +2260,80 @@ fun DrawScope.drawSculpted3DCharacterFigure(
             drawCircle(color = gold, radius = scale * 0.042f, center = Offset(leftAttrX, attrY - scale * 0.28f))
         }
 
+        CharacterVisualStyle.KING_DAVID_PSALMIST,
+        CharacterVisualStyle.ASAPH_AND_KORAH -> {
+            // 3D Sculpted 10-Stringed Golden Kinnor Harp / Sanctuary Psaltery
+            val harpFrame = Path().apply {
+                moveTo(leftAttrX - scale * 0.22f, attrY + scale * 0.26f)
+                lineTo(leftAttrX + scale * 0.22f, attrY + scale * 0.26f)
+                quadraticTo(leftAttrX + scale * 0.30f, attrY - scale * 0.24f, leftAttrX + scale * 0.16f, attrY - scale * 0.40f)
+                quadraticTo(leftAttrX, attrY - scale * 0.30f, leftAttrX - scale * 0.20f, attrY - scale * 0.36f)
+                close()
+            }
+            drawPath(
+                path = harpFrame,
+                color = gold,
+                style = Stroke(width = 3.6f, cap = StrokeCap.Round)
+            )
+            for (s in -2..2) {
+                val sx = leftAttrX + s * (scale * 0.07f)
+                drawLine(
+                    color = Color.White.copy(alpha = 0.88f),
+                    start = Offset(sx, attrY - scale * 0.30f),
+                    end = Offset(sx, attrY + scale * 0.24f),
+                    strokeWidth = 1.3f
+                )
+            }
+        }
+
+        CharacterVisualStyle.KING_SOLOMON_WISDOM -> {
+            // 3D Royal Scepter of Wisdom & Sapphire Orb
+            drawLine(
+                color = gold,
+                start = Offset(leftAttrX + scale * 0.06f, headCy - scale * 0.38f),
+                end = Offset(leftAttrX + scale * 0.06f, torsoBottomY),
+                strokeWidth = 3.8f,
+                cap = StrokeCap.Round
+            )
+            drawCircle(
+                brush = Brush.radialGradient(
+                    listOf(Color.White, gold, Color(0xFFB36B00)),
+                    center = Offset(leftAttrX + scale * 0.04f, headCy - scale * 0.44f),
+                    radius = scale * 0.14f
+                ),
+                radius = scale * 0.12f,
+                center = Offset(leftAttrX + scale * 0.06f, headCy - scale * 0.42f)
+            )
+            drawCircle(
+                color = Color(0xFF1E88E5),
+                radius = scale * 0.055f,
+                center = Offset(leftAttrX + scale * 0.06f, headCy - scale * 0.42f)
+            )
+        }
+
+        CharacterVisualStyle.LADY_WISDOM_VIRTUOUS -> {
+            // 3D Golden Lamp of Understanding & Faceted Ruby
+            drawOval(
+                brush = Brush.horizontalGradient(
+                    listOf(Color.White, gold, Color(0xFFB87414)),
+                    startX = leftAttrX - scale * 0.20f,
+                    endX = leftAttrX + scale * 0.20f
+                ),
+                topLeft = Offset(leftAttrX - scale * 0.20f, attrY - scale * 0.06f),
+                size = Size(scale * 0.40f, scale * 0.20f)
+            )
+            drawCircle(
+                color = Color(0xFFFFF5B8),
+                radius = scale * 0.085f,
+                center = Offset(leftAttrX + scale * 0.14f, attrY - scale * 0.14f)
+            )
+            drawCircle(
+                color = Color(0xFFE01E48),
+                radius = scale * 0.075f,
+                center = Offset(leftAttrX - scale * 0.04f, attrY - scale * 0.20f)
+            )
+        }
+
         else -> {
             // 3D Illuminated Apostolic Parchment Scroll with Gold Finials
             drawRoundRect(
@@ -2160,6 +2417,41 @@ private fun DrawScope.draw3DStoryPropOverlay(
             // 3D Beveled Golden Cross Emblem on Altar Plinth
             drawLine(color = gold, start = Offset(px, py - r * 0.90f), end = Offset(px, py + r * 0.45f), strokeWidth = 2.6f, cap = StrokeCap.Round)
             drawLine(color = gold, start = Offset(px - r * 0.55f, py - r * 0.35f), end = Offset(px + r * 0.55f, py - r * 0.35f), strokeWidth = 2.6f, cap = StrokeCap.Round)
+        }
+
+        Verse3DPictureType.PSALM_DAVID_HARP_WORSHIP_3D,
+        Verse3DPictureType.PSALM_SHEPHERD_STILL_WATERS_3D -> {
+            // 3D Golden Kinnor Harp Emblem on Altar Plinth
+            drawArc(
+                color = gold,
+                startAngle = 10f,
+                sweepAngle = 160f,
+                useCenter = false,
+                topLeft = Offset(px - r * 0.75f, py - r * 0.90f),
+                size = Size(r * 1.5f, r * 1.3f),
+                style = Stroke(width = 2.6f, cap = StrokeCap.Round)
+            )
+            for (s in -1..1) {
+                val sx = px + s * (r * 0.35f)
+                drawLine(color = Color.White.copy(alpha = 0.85f), start = Offset(sx, py - r * 0.65f), end = Offset(sx, py + r * 0.25f), strokeWidth = 1.3f)
+            }
+        }
+
+        Verse3DPictureType.PROVERBS_SOLOMON_ROYAL_WISDOM_3D,
+        Verse3DPictureType.PROVERBS_SEVEN_PILLARS_TREASURE_3D -> {
+            // 3D Royal Crown of Wisdom & Faceted Ruby on Altar Plinth
+            val crown = Path().apply {
+                moveTo(px - r * 0.85f, py + r * 0.25f)
+                lineTo(px - r * 0.95f, py - r * 0.55f)
+                lineTo(px - r * 0.38f, py - r * 0.15f)
+                lineTo(px, py - r * 0.75f)
+                lineTo(px + r * 0.38f, py - r * 0.15f)
+                lineTo(px + r * 0.95f, py - r * 0.55f)
+                lineTo(px + r * 0.85f, py + r * 0.25f)
+                close()
+            }
+            drawPath(crown, color = gold)
+            drawCircle(color = Color(0xFFE01E48), radius = r * 0.22f, center = Offset(px, py - r * 0.05f))
         }
 
         else -> {

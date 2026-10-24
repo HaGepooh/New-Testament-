@@ -59,6 +59,7 @@ import com.example.ui.components.SanctuarySearchField
 
 private val galleryThemeFilters = listOf(
     "All Themes",
+    "Psalms & Proverbs",
     "Incarnation & Light",
     "Teachings & Parables",
     "Miracles & Wonders",
@@ -69,8 +70,8 @@ private val galleryThemeFilters = listOf(
 )
 
 private enum class GallerySectionMode(val label: String) {
-    CHARACTERS_AND_DISCIPLES("Jesus & Disciples (30 Portraits)"),
-    CHAPTER_SCENES("260 Chapter Illustrations")
+    CHARACTERS_AND_DISCIPLES("Biblical Figures (34 Portraits)"),
+    CHAPTER_SCENES("441 Chapter Illustrations")
 }
 
 @Composable
@@ -147,7 +148,7 @@ fun SacredArtGalleryScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "Detailed 3D portraits of Jesus, the Twelve Disciples & 30 Bible figures alongside all 260 New Testament chapter paintings",
+                    text = "Detailed 3D portraits of Jesus, the Twelve Disciples, King David, King Solomon & 34 Bible figures alongside all 441 New Testament, Psalms & Proverbs chapter paintings",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -638,10 +638,58 @@ object NewTestamentBooks {
                 waterOrGround = Color(0xFF1E295E)
             ),
             defaultArchetype = SceneArchetype.NEW_JERUSALEM_TREE
+        ),
+
+        // ==================== PSALMS & PROVERBS (POETRY & WISDOM) ====================
+        BookInfo(
+            id = "PSA",
+            apiName = "Psalms",
+            name = "Psalms",
+            shortName = "Ps",
+            greekTitle = "Psalmoi • Tehillim",
+            author = "King David, Asaph & the Sons of Korah",
+            dateWritten = "c. 1000–450 BC",
+            chapterCount = 150,
+            category = TestamentCategory.POETRY_AND_WISDOM,
+            summary = "The sacred hymnal of Israel and the Church—150 inspired songs of praise, shepherd comfort (Psalm 23), Messianic prophecy, repentance, and Hallelujah symphonies upon the golden harp of Zion.",
+            basePalette = ArtPalette(
+                skyTop = Color(0xFF0D243B),
+                skyMiddle = Color(0xFF1D5B6E),
+                skyHorizon = Color(0xFFF5C252),
+                primaryJewel = Color(0xFF289E7A),
+                secondaryJewel = Color(0xFFD94A64),
+                goldLeaf = Color(0xFFFFDE73),
+                foregroundSilhouette = Color(0xFF102129),
+                waterOrGround = Color(0xFF164A59)
+            ),
+            defaultArchetype = SceneArchetype.DAVID_HARP_PASTURES
+        ),
+        BookInfo(
+            id = "PRO",
+            apiName = "Proverbs",
+            name = "Proverbs",
+            shortName = "Prov",
+            greekTitle = "Paroimiai • Mishlei",
+            author = "King Solomon, Agur & King Lemuel",
+            dateWritten = "c. 970–700 BC",
+            chapterCount = 31,
+            category = TestamentCategory.POETRY_AND_WISDOM,
+            summary = "Thirty-one chapters of royal Solomonic wisdom—revealing that the fear of the Lord is the beginning of knowledge, the seven pillars of Lady Wisdom, and the noble portrait of Valor in Chapter 31.",
+            basePalette = ArtPalette(
+                skyTop = Color(0xFF241638),
+                skyMiddle = Color(0xFF542E73),
+                skyHorizon = Color(0xFFF7BE4D),
+                primaryJewel = Color(0xFFC94068),
+                secondaryJewel = Color(0xFF3882C4),
+                goldLeaf = Color(0xFFFFDF75),
+                foregroundSilhouette = Color(0xFF1A1029),
+                waterOrGround = Color(0xFF331F4D)
+            ),
+            defaultArchetype = SceneArchetype.SOLOMON_WISDOM_PILLARS
         )
     )
 
-    val totalNewTestamentChapters: Int = allBooks.sumOf { it.chapterCount } // 260 chapters
+    val totalNewTestamentChapters: Int = allBooks.sumOf { it.chapterCount } // 441 chapters (260 NT + 150 Psalms + 31 Proverbs)
 
     fun getBookById(bookId: String): BookInfo {
         return allBooks.firstOrNull { it.id == bookId } ?: allBooks.first()

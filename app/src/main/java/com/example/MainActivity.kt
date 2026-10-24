@@ -279,6 +279,10 @@ fun IlluminatedBibleApp(viewModel: BibleViewModel) {
                                     ttsEngine?.stop()
                                     viewModel.selectBookAndChapter(uiState.selectedBookId, chNum)
                                 },
+                                onSelectBookAndChapter = { bookId, chNum ->
+                                    ttsEngine?.stop()
+                                    viewModel.selectBookAndChapter(bookId, chNum)
+                                },
                                 onPreviousChapter = {
                                     ttsEngine?.stop()
                                     viewModel.navigatePreviousChapter()

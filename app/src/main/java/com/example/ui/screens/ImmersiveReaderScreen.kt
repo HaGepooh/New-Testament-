@@ -103,6 +103,7 @@ fun ImmersiveReaderScreen(
     savedVersesForChapter: Map<Int, SavedVerseEntity>,
     completedChapterKeys: Set<String>,
     onSelectChapter: (Int) -> Unit,
+    onSelectBookAndChapter: (String, Int) -> Unit = { _, ch -> onSelectChapter(ch) },
     onPreviousChapter: () -> Unit,
     onNextChapter: () -> Unit,
     onOpenBookPicker: () -> Unit,
@@ -522,18 +523,78 @@ fun ImmersiveReaderScreen(
                 }
             }
 
-            // 2. CHAPTER SELECTOR RIBBON FOR CURRENT BOOK
+            // 2. QUICK BOOK & CHAPTER SELECTOR RIBBON (INCLUDING PSALMS & PROVERBS)
             item(key = "chapter_strip_${book.id}") {
-                LazyRow(
+                val quickBooks = remember {
+                    listOf(
+                        Triple("PSA", "Psalms (150)", 23),
+                        Triple("PRO", "Proverbs (31)", 3),
+                        Triple("MAT", "Matthew", 5),
+                        Triple("JHN", "John", 1),
+                        Triple("ACT", "Acts", 2),
+                        Triple("ROM", "Romans", 8),
+                        Triple("REV", "Revelation", 21)
+                    )
+                }
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
-                        .padding(vertical = 10.dp)
-                        .testTag("chapter_selector_row"),
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items((1..book.chapterCount).toList()) { chNum ->
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp, bottom = 4.dp)
+                            .testTag("quick_book_selector_row"),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(quickBooks, key = { it.first }) { (bId, label, defaultCh) ->
+                            val isCurrentBook = bId == book.id
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = if (isCurrentBook) {
+                                    MaterialTheme.colorScheme.primaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+                                },
+                                border = BorderStroke(
+                                    1.dp,
+                                    if (isCurrentBook) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)
+                                ),
+                                modifier = Modifier
+                                    .clickable {
+                                        if (!isCurrentBook) {
+                                            onSelectBookAndChapter(bId, defaultCh)
+                                        }
+                                    }
+                                    .testTag("quick_book_pill_$bId")
+                            ) {
+                                Text(
+                                    text = label,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (isCurrentBook) {
+                                        MaterialTheme.colorScheme.onPrimaryContainer
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
+                                    fontWeight = if (isCurrentBook) FontWeight.Bold else FontWeight.Medium,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .testTag("chapter_selector_row"),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items((1..book.chapterCount).toList()) { chNum ->
                         val isSelected = chNum == metadata.chapterNumber
                         val isDone = completedChapterKeys.contains("${book.id}_$chNum")
 
@@ -581,6 +642,7 @@ fun ImmersiveReaderScreen(
                         }
                     }
                 }
+            }
             }
 
             // 2B. KEY BIBLICAL CHARACTERS & DISCIPLES IN THIS CHAPTER (3D PORTRAIT STRIP)

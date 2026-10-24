@@ -32,7 +32,11 @@ enum class CharacterVisualStyle {
     CORNELIUS_CENTURION,        // Gilded Roman galea helmet with crimson crest, bronze cuirass, red cloak & shield of faith
     LYDIA_OF_THYATIRA,          // Royal Tyrian purple silk veil & robe, scroll of Philippi & pearl clasp
     MOSES_AND_ELIJAH_PROPHETS,  // Flowing patriarch silver beard, sapphire tablets of the Law & mantle of fire
-    MICHAEL_ARCHANGEL           // Blazing crimson-gold archangel wings, celestial armor, scales & starry sword
+    MICHAEL_ARCHANGEL,          // Blazing crimson-gold archangel wings, celestial armor, scales & starry sword
+    KING_DAVID_PSALMIST,        // Royal golden crown of Judah, emerald & crimson robe, 3D 10-stringed Golden Kinnor Harp
+    ASAPH_AND_KORAH,            // White & lapis Levitical sanctuary robes, golden headband & 3D sanctuary psaltery/cymbals
+    KING_SOLOMON_WISDOM,        // Multi-jeweled Solomonic royal crown, Tyrian purple & gold mantle, 3D Scepter & Scroll of Proverbs
+    LADY_WISDOM_VIRTUOUS        // Sapphire & rose-gold veil, golden diadem of understanding, 3D Seven-Pillar Lamp & Ruby Gem
 }
 
 data class BiblicalCharacter(
@@ -628,6 +632,83 @@ object BiblicalCharactersCatalog {
             keyBookId = "REV",
             keyChapterNumber = 12,
             keyVerseQuote = "There was war in heaven: Michael and his angels made war on the dragon."
+        ),
+        // ---------------- 4 NEW PSALMS & PROVERBS 3D CHARACTERS ----------------
+        BiblicalCharacter(
+            id = "KING_DAVID",
+            name = "King David the Psalmist",
+            title = "Sweet Psalmist of Israel & Shepherd-King of Jerusalem",
+            ancientName = "Dawid HaMelekh • Δαυιδ ο Βασιλευς",
+            groupLabel = "Psalms & Proverbs",
+            visualStyle = CharacterVisualStyle.KING_DAVID_PSALMIST,
+            primaryRobeColor = Color(0xFF1B6B54),
+            mantleColor = Color(0xFF9E1F38),
+            haloAccentColor = Color(0xFFFFDF73),
+            backgroundSkyTop = Color(0xFF0E243B),
+            backgroundSkyBottom = Color(0xFF1D596B),
+            sacredAttribute = "3D Ten-Stringed Golden Kinnor Harp, Royal Crown of Judah & Shepherd's Staff",
+            biography = "Anointed by Samuel in Bethlehem, David shepherded his father's flock across Judean pastures before reigning as King in Jerusalem and composing the immortal Psalms of praise, repentance, and Messianic prophecy.",
+            portraitSymbolism = "Sculpted in 3D wearing the jeweled Golden Crown of Judah, emerald tunic of green pastures, royal crimson mantle, and playing the ten-stringed golden Kinnor harp.",
+            keyBookId = "PSA",
+            keyChapterNumber = 23,
+            keyVerseQuote = "The Lord is my shepherd: I shall lack nothing. He makes me lie down in green pastures. He leads me beside still waters."
+        ),
+        BiblicalCharacter(
+            id = "ASAPH_MUSICIAN",
+            name = "Asaph & Sons of Korah",
+            title = "Chief Musicians of Mount Zion & Temple Sanctuary Choir",
+            ancientName = "Asaph & Bene Qorach • Ασαφ",
+            groupLabel = "Psalms & Proverbs",
+            visualStyle = CharacterVisualStyle.ASAPH_AND_KORAH,
+            primaryRobeColor = Color(0xFF214A80),
+            mantleColor = Color(0xFFF0EAE1),
+            haloAccentColor = Color(0xFFFFD86B),
+            backgroundSkyTop = Color(0xFF122240),
+            backgroundSkyBottom = Color(0xFF2E547A),
+            sacredAttribute = "3D Golden Sanctuary Psaltery, Cymbals of Praise & Scroll of Zion",
+            biography = "Appointed by King David to lead sacred music before the Ark of the Covenant, Asaph and the Sons of Korah authored deeply poetic Psalms celebrating God as our Refuge (Psalm 46) and longing for the courts of the Lord (Psalm 84).",
+            portraitSymbolism = "Draped in Levitical white linen and sapphire-blue priestly vestments with a golden temple diadem and sacred stringed psaltery.",
+            keyBookId = "PSA",
+            keyChapterNumber = 84,
+            keyVerseQuote = "How lovely are your dwellings, Lord of Armies! My soul longs, and even faints for the courts of the Lord."
+        ),
+        BiblicalCharacter(
+            id = "KING_SOLOMON",
+            name = "King Solomon the Wise",
+            title = "Author of Proverbs & Royal Builder of the First Temple",
+            ancientName = "Shlomo HaMelekh • Σολομων",
+            groupLabel = "Psalms & Proverbs",
+            visualStyle = CharacterVisualStyle.KING_SOLOMON_WISDOM,
+            primaryRobeColor = Color(0xFF56247A),
+            mantleColor = Color(0xFFD99A2B),
+            haloAccentColor = Color(0xFFFFE075),
+            backgroundSkyTop = Color(0xFF1F1438),
+            backgroundSkyBottom = Color(0xFF542B70),
+            sacredAttribute = "3D Solomonic Royal Crown, Golden Scepter of Justice & Illuminated Scroll of Proverbs",
+            biography = "Son of David who asked the Lord at Gibeon not for riches or long life, but for an understanding heart to discern between good and evil; author of three thousand proverbs and builder of the glorious Temple in Jerusalem.",
+            portraitSymbolism = "Crowned with a 3D ruby-and-sapphire Solomonic diadem, robed in imperial Tyrian purple and burnished gold leaf, holding the royal scepter and scroll of wisdom.",
+            keyBookId = "PRO",
+            keyChapterNumber = 3,
+            keyVerseQuote = "Trust in the Lord with all your heart, and don't lean on your own understanding. In all your ways acknowledge him, and he will make your paths straight."
+        ),
+        BiblicalCharacter(
+            id = "LADY_WISDOM",
+            name = "Lady Wisdom & Woman of Valor",
+            title = "Herald of the Seven Pillars & Noble Crown of Proverbs 31",
+            ancientName = "Chokhmah & Eshet Chayil • Η Σοφια",
+            groupLabel = "Psalms & Proverbs",
+            visualStyle = CharacterVisualStyle.LADY_WISDOM_VIRTUOUS,
+            primaryRobeColor = Color(0xFF9E2654),
+            mantleColor = Color(0xFF235789),
+            haloAccentColor = Color(0xFFFFDE73),
+            backgroundSkyTop = Color(0xFF241436),
+            backgroundSkyBottom = Color(0xFF632858),
+            sacredAttribute = "3D Lamp of Understanding, Ruby Treasure & Seven Marble Pillars",
+            biography = "Personified in Proverbs 1, 8, and 9 calling from the heights above the city gates and building her house upon seven hewn pillars, culminating in the Proverbs 31 Woman of Valor whose worth is far above rubies.",
+            portraitSymbolism = "Portrayed in rose-ruby silk and deep sapphire veil crowned with a golden diadem, holding an unextinguished golden lamp and ruby jewel.",
+            keyBookId = "PRO",
+            keyChapterNumber = 31,
+            keyVerseQuote = "She opens her mouth with wisdom. Kind instruction is on her tongue. Charm is deceitful, and beauty is vain; but a woman who fears the Lord, she shall be praised."
         )
     )
 
@@ -717,6 +798,17 @@ object BiblicalCharactersCatalog {
             "1JN", "2JN", "3JN" -> listOf("JOHN", "JESUS", "MARY_MOTHER", "PETER", "ANDREW", "PHILIP")
             "JUD" -> listOf("JAMES_AND_JUDE", "MICHAEL_ARCHANGEL", "JESUS", "MOSES_AND_ELIJAH", "PETER", "ENOCH")
             "REV" -> listOf("JESUS", "JOHN", "MICHAEL_ARCHANGEL", "GABRIEL_ARCHANGEL", "MOSES_AND_ELIJAH", "STEPHEN")
+            "PSA" -> when (chapterNumber) {
+                23 -> listOf("KING_DAVID", "JESUS", "ASAPH_MUSICIAN", "GABRIEL_ARCHANGEL", "MOSES_AND_ELIJAH", "JOHN")
+                42, 46, 84 -> listOf("ASAPH_MUSICIAN", "KING_DAVID", "JESUS", "MOSES_AND_ELIJAH", "GABRIEL_ARCHANGEL", "MICHAEL_ARCHANGEL")
+                90, 91 -> listOf("MOSES_AND_ELIJAH", "KING_DAVID", "MICHAEL_ARCHANGEL", "GABRIEL_ARCHANGEL", "JESUS", "ASAPH_MUSICIAN")
+                else -> listOf("KING_DAVID", "ASAPH_MUSICIAN", "JESUS", "MOSES_AND_ELIJAH", "GABRIEL_ARCHANGEL", "MICHAEL_ARCHANGEL", "JOHN", "PETER")
+            }
+            "PRO" -> when (chapterNumber) {
+                1, 8, 9 -> listOf("KING_SOLOMON", "LADY_WISDOM", "JESUS", "JAMES_AND_JUDE", "NICODEMUS_PHARISEE", "MATTHEW")
+                31 -> listOf("LADY_WISDOM", "KING_SOLOMON", "MARTHA_AND_MARY_BETHANY", "LYDIA_PRISCILLA", "MARY_MOTHER", "JESUS")
+                else -> listOf("KING_SOLOMON", "LADY_WISDOM", "JESUS", "JAMES_AND_JUDE", "PAUL", "LUKE", "NICODEMUS_PHARISEE", "WISE_MAGI")
+            }
             else -> listOf("JESUS", "PETER", "JOHN", "PAUL", "MARY_MOTHER", "GABRIEL_ARCHANGEL")
         }
         return baseIds.map { getCharacterById(it) }.distinctBy { it.id }
