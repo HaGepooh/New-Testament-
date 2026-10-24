@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Illuminated NT</string>
+    <string name="nav_reader">Sanctuary</string>
+    <string name="nav_books">Canon</string>
+    <string name="nav_gallery">Sacred Art</string>
+    <string name="nav_saved">Treasures</string>
+    <string name="search_hint">Search chapters, art themes, or verses…</string>
+    <string name="inspect_art_cd">Inspect full-screen chapter artwork</string>
+    <string name="narrate_chapter_cd">Narrate chapter aloud</string>
+    <string name="typography_settings_cd">Reading appearance and typography</string>
+    <string name="previous_chapter">Previous Chapter</string>
+    <string name="next_chapter">Next Chapter</string>
+    <string name="empty_bookmarks_title">No Saved Verses Yet</string>
+    <string name="empty_bookmarks_subtitle">Tap any verse while reading to highlight it in sacred jewel tones or save a personal reflection.</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:scaleX="0.56"
+        android:scaleY="0.56"
+        android:translateX="5.28"
+        android:translateY="5.28">
+        <!-- Golden Halo Arch -->
+        <path
+            android:fillColor="#33FFD56B"
+            android:pathData="M12,2C7.58,2 4,5.58 4,10C4,14.42 7.58,18 12,18C16.42,18 20,14.42 20,10C20,5.58 16.42,2 12,2Z" />
+        <!-- Radiant Cross above Open Bible -->
+        <path
+            android:fillColor="#FFD56B"
+            android:pathData="M11,2H13V6H16V8H13V13H11V8H8V6H11V2Z" />
+        <!-- Illuminated Open Gospel Book -->
+        <path
+            android:fillColor="#FFF6E5"
+            android:pathData="M21,11.5C19.5,11 17.5,10.75 15.5,10.75C13.8,10.75 12.6,11.1 12,11.6C11.4,11.1 10.2,10.75 8.5,10.75C6.5,10.75 4.5,11 3,11.5V20.5C4.5,20 6.5,19.75 8.5,19.75C10.4,19.75 11.5,20.1 12,20.5C12.5,20.1 13.6,19.75 15.5,19.75C17.5,19.75 19.5,20 21,20.5V11.5Z" />
+        <!-- Gold Leaf Book Spine & Trim -->
+        <path
+            android:fillColor="#F4B43A"
+            android:pathData="M11.3,11.6H12.7V20.5H11.3V11.6ZM3,20.2C4.6,19.7 6.5,19.4 8.5,19.4C10.2,19.4 11.4,19.7 12,20.2C12.6,19.7 13.8,19.4 15.5,19.4C17.5,19.4 19.4,19.7 21,20.2V21.5C19.4,21 17.5,20.7 15.5,20.7C13.8,20.7 12.6,21 12,21.5C11.4,21 10.2,20.7 8.5,20.7C6.5,20.7 4.6,21 3,21.5V20.2Z" />
+    </group>
+</vector>
