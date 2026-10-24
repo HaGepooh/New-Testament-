@@ -30,7 +30,7 @@ class ExampleRobolectricTest {
     fun `30 biblical characters, 6 distinct 3D chapter slides, and 3 disjoint-character 3D variations per verse are configured`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val appName = context.getString(R.string.app_name)
-        assertEquals("Illuminated NT", appName)
+        assertEquals("The Radiant New Testament", appName)
 
         // Verify all 27 New Testament books and 260 chapters have unique artwork metadata
         assertEquals(27, NewTestamentBooks.allBooks.size)

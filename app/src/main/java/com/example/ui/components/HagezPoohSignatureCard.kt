@@ -118,7 +118,7 @@ fun HagezPoohSignatureCard(
                 )
 
                 Text(
-                    text = "Crafted & Illuminated by HagezPooh • 260 New Testament 3D Chapters",
+                    text = "The Radiant New Testament • Crafted & Illuminated by HagezPooh",
                     style = MaterialTheme.typography.labelMedium,
                     fontStyle = FontStyle.Italic,
                     color = goldAccent.copy(alpha = 0.9f),

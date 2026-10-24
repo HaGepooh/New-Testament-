@@ -1,5 +1,5 @@
 {
-  "name": "Illuminated NT",
+  "name": "The Radiant New Testament",
   "description": "An immersive New Testament Bible reader featuring colorful artistic chapter illustrations, full-screen sacred art inspection, natural voice narration, and typography customization.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

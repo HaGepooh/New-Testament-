@@ -121,7 +121,7 @@ fun VerseStudySheet(
 
                 OutlinedButton(
                     onClick = {
-                        val shareText = "“${verse.text}” — $bookName ${verse.chapterNumber}:${verse.verseNumber} ($chapterArtTitle • Illuminated NT)"
+                        val shareText = "“${verse.text}” — $bookName ${verse.chapterNumber}:${verse.verseNumber} ($chapterArtTitle • The Radiant New Testament)"
                         val sendIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareText)

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Illuminated NT"
+rootProject.name = "The Radiant New Testament"
 
 include(":app")
