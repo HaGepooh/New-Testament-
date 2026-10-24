@@ -14,9 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -27,6 +25,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.key.utf16CodePoint
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -44,19 +43,18 @@ data class DeduplicationResult(
 )
 
 /**
- * Creates a [TextFieldValue] carrying a zero-length `"sanctuary_sync"` annotation keyed by [syncTick].
+ * Creates a [TextFieldValue] for [SanctuarySearchField] and [SanctuaryNoteField].
  *
- * Why this is critical for Jetpack Compose `BasicTextField` / `CoreTextField`:
- * When `BasicTextField` receives a duplicate keystroke (e.g. `"a" -> "aa"`), its internal
- * `EditProcessor.mBuffer` is mutated to `"aa"` BEFORE `onValueChange` is called. If `onValueChange`
- * rejects `"aa"` and returns a plain `TextFieldValue("a")` that is `.equals()` to the previous
- * `TextFieldValue("a")`, Compose's slot table skips recomposing `CoreTextField`, so
- * `EditProcessor.reset()` never runs and `"aa"` remains stuck on screen.
- *
- * Embedding [syncTick] in `AnnotatedString.annotations` makes `newValue.equals(oldValue)` evaluate
- * to `false` whenever a duplicate is rejected, forcing `OutlinedTextField` -> `BasicTextField` ->
- * `CoreTextField` to recompose and execute `EditProcessor.reset(value, inputSession)` to overwrite
- * `mBuffer` back to `"a"`.
+ * CRITICAL ANDROID IME & COMPOSE `EditProcessor` INVARIANT:
+ * - When [syncTick] is `0` (used on all normal, non-deduplicated keystrokes), this returns a
+ *   plain [AnnotatedString] with ZERO string annotations and preserves the active IME [composition].
+ *   This guarantees that inside Jetpack Compose's `EditProcessor.reset(value, textInputSession)`,
+ *   `mBufferState.annotatedString == value.annotatedString` evaluates to `true`, so Compose NEVER
+ *   calls `mBuffer.commitComposition()` or `InputMethodManager.restartInput(view)` during normal
+ *   typing on Gboard, Samsung Keyboard, SwiftKey, or hardware keyboards.
+ * - When [syncTick] is `> 0` (used ONLY when a duplicate keystroke was rejected and `EditProcessor`
+ *   must be forced to overwrite its internal buffer), a zero-length `"sanctuary_sync"` annotation
+ *   is attached so `newValue.equals(oldValue)` is `false` and `CoreTextField` resets `EditProcessor`.
  */
 fun createSyncedTextFieldValue(
     text: String,
@@ -68,35 +66,39 @@ fun createSyncedTextFieldValue(
         start = selection.start.coerceIn(0, text.length),
         end = selection.end.coerceIn(0, text.length)
     )
-    val annotated = buildAnnotatedString {
-        append(text)
-        addStringAnnotation(
-            tag = "sanctuary_sync",
-            annotation = syncTick.toString(),
-            start = 0,
-            end = 0
-        )
+    val safeComposition = composition?.let { comp ->
+        val start = comp.start.coerceIn(0, text.length)
+        val end = comp.end.coerceIn(0, text.length)
+        if (start < end) TextRange(start, end) else null
+    }
+    val annotated = if (syncTick > 0) {
+        buildAnnotatedString {
+            append(text)
+            addStringAnnotation(
+                tag = "sanctuary_sync",
+                annotation = syncTick.toString(),
+                start = 0,
+                end = 0
+            )
+        }
+    } else {
+        AnnotatedString(text)
     }
     return TextFieldValue(
         annotatedString = annotated,
         selection = safeSelection,
-        composition = composition
+        composition = safeComposition
     )
 }
 
 /**
  * Deterministic keystroke and IME deduplicator that prevents a single key press or soft-keyboard
- * tap from producing two identical letters on any Android device or streaming emulator bridge.
- *
- * Handles all five duplication pathways:
- * 1. Dual hardware `KeyEvent` + `InputConnection.commitText` events emitted for a single keystroke.
- * 2. Single-callback batched double insertions (e.g. `"" -> "aa"` or `"m" -> "maa"`).
- * 3. Two-callback sequential duplicate insertions (`"" -> "a"` followed by `"a" -> "aa"`).
- * 4. Soft-keyboard composing re-commit + new char (`"m" -> "mma"` collapsed to `"ma"`).
- * 5. Full composing buffer echo (`"ma" -> "mama"` or `"ma" -> "mamat"`).
+ * tap from producing two identical letters on any Android device or streaming emulator bridge,
+ * while never interrupting normal multi-letter typing or IME composing spans.
  */
 class SanctuaryInputDeduplicator(
-    private val duplicateWindowMs: Long = 1200L
+    private val duplicateWindowMs: Long = 160L,
+    private val firstCharDuplicateWindowMs: Long = 450L
 ) {
     var lastInsertedChar: Char? = null
         private set
@@ -123,7 +125,8 @@ class SanctuaryInputDeduplicator(
 
     /**
      * Intercepts hardware/bridge [KeyEventType.KeyDown] events before they reach `BasicTextField`.
-     * Returns `true` if the event is a duplicate keystroke that should be consumed immediately.
+     * Consumes only rapid hardware/emulator key-bounce duplicates within [duplicateWindowMs]
+     * so legitimate double letters (e.g. "Matthew", "Philippians", "good", "all") are never blocked.
      */
     fun shouldConsumeKeyDown(
         utf16CodePoint: Int,
@@ -138,21 +141,22 @@ class SanctuaryInputDeduplicator(
             return false
         }
         val keyChar = utf16CodePoint.toChar()
+        val windowMs = if (keyChar.isDigit()) 60L else duplicateWindowMs
 
-        // Block if a previous KeyDown for the same character fired within the duplicate window
+        // Block if a previous KeyDown for the same character fired within the bounce window
         val prevKey = lastKeyDownChar
         if (prevKey != null &&
             prevKey.equals(keyChar, ignoreCase = true) &&
-            (nowMs - lastKeyDownTimestampMs) in 0L..duplicateWindowMs
+            (nowMs - lastKeyDownTimestampMs) in 0L..windowMs
         ) {
             return true
         }
 
-        // Block if InputConnection.commitText already inserted this character within the window
+        // Block if InputConnection.commitText already inserted this character within the bounce window
         val prevInserted = lastInsertedChar
         if (prevInserted != null &&
             prevInserted.equals(keyChar, ignoreCase = true) &&
-            (nowMs - lastInsertTimestampMs) in 0L..duplicateWindowMs
+            (nowMs - lastInsertTimestampMs) in 0L..windowMs
         ) {
             return true
         }
@@ -163,10 +167,13 @@ class SanctuaryInputDeduplicator(
     }
 
     /**
-     * Sanitizes an incoming [TextFieldValue] from `BasicTextField.onValueChange`.
-     * Preserves IME `composition` on normal edits so soft keyboards do not restart input mid-word,
-     * and strips `composition` + increments `syncCounter` when a duplicate is rejected so
-     * `CoreTextField` immediately resets its internal `EditingBuffer`.
+     * Sanitizes an incoming [TextFieldValue] from `OutlinedTextField.onValueChange`.
+     *
+     * - On normal edits (`wasDeduplicated == false`), returns a plain [TextFieldValue] with
+     *   `syncTick = 0` (no annotations) and preserves `incomingValue.composition` so the Android
+     *   IME session is never restarted or interrupted.
+     * - On rejected duplicates (`wasDeduplicated == true`), increments `syncCounter` and strips
+     *   `composition` so `CoreTextField` immediately resets its internal `EditingBuffer`.
      */
     fun processValueChange(
         currentValue: TextFieldValue,
@@ -182,21 +189,21 @@ class SanctuaryInputDeduplicator(
                 sanitizedValue = createSyncedTextFieldValue(
                     text = oldText,
                     selection = incomingValue.selection,
-                    syncTick = syncCounter,
+                    syncTick = 0,
                     composition = incomingValue.composition
                 ),
                 wasDeduplicated = false
             )
         }
 
-        // Deletion or clear: reset state so user can immediately re-type any character
+        // Deletion or clear: reset state and keep plain AnnotatedString so Backspace repeats smoothly
         if (rawNewText.length < oldText.length) {
             reset()
             return DeduplicationResult(
                 sanitizedValue = createSyncedTextFieldValue(
                     text = rawNewText,
                     selection = incomingValue.selection,
-                    syncTick = syncCounter,
+                    syncTick = 0,
                     composition = incomingValue.composition
                 ),
                 wasDeduplicated = false
@@ -204,9 +211,10 @@ class SanctuaryInputDeduplicator(
         }
 
         // Pathway A: Full composing buffer echo (e.g., "ma" -> "mama" or "ma" -> "mamat")
-        if (oldText.isNotEmpty() &&
+        if (oldText.length >= 2 &&
             rawNewText.startsWith(oldText + oldText, ignoreCase = true) &&
-            rawNewText.length <= oldText.length * 2 + 2
+            rawNewText.length <= oldText.length * 2 + 2 &&
+            (nowMs - lastInsertTimestampMs) in 0L..firstCharDuplicateWindowMs
         ) {
             val remainder = rawNewText.substring(oldText.length * 2)
             val dedupedText = oldText + remainder
@@ -229,9 +237,10 @@ class SanctuaryInputDeduplicator(
         if (insertion != null) {
             val insertedText = insertion.inserted
 
-            // Pathway B: Single-callback batched double character insertion (e.g. "" -> "aa", "m" -> "maa", "" -> "Mm")
+            // Pathway B: Single-callback batched double character insertion (e.g. "" -> "jj", "m" -> "maa", "" -> "Mm")
             if (insertedText.length == 2 &&
-                insertedText[0].equals(insertedText[1], ignoreCase = true)
+                insertedText[0].equals(insertedText[1], ignoreCase = true) &&
+                !insertedText[0].isDigit()
             ) {
                 val keptChar = insertedText[0]
                 val dedupedText = oldText.substring(0, insertion.prefixLength) +
@@ -254,11 +263,14 @@ class SanctuaryInputDeduplicator(
                 )
             }
 
-            // Pathway C: Soft-keyboard composing re-commit of previous char + new char (e.g. "m" -> "mma")
+            // Pathway C: Soft-keyboard composing re-commit of first char + new char (e.g. "m" -> "mma")
+            val pathwayCWindow = if (oldText.length == 1) firstCharDuplicateWindowMs else duplicateWindowMs
             if (insertedText.length == 2 &&
+                oldText.length <= 2 &&
                 insertion.prefixLength > 0 &&
                 insertedText[0].equals(oldText[insertion.prefixLength - 1], ignoreCase = true) &&
-                (nowMs - lastInsertTimestampMs) in 0L..duplicateWindowMs
+                !insertedText[0].equals(insertedText[1], ignoreCase = true) &&
+                (nowMs - lastInsertTimestampMs) in 0L..pathwayCWindow
             ) {
                 val newChar = insertedText[1]
                 val dedupedText = oldText.substring(0, insertion.prefixLength) +
@@ -287,9 +299,26 @@ class SanctuaryInputDeduplicator(
                 val timeDelta = nowMs - lastInsertTimestampMs
                 val prevChar = lastInsertedChar
 
+                // Determine effective bounce window:
+                // - Digits ('0'..'9'): 60ms so typing "Psalm 119" or "Psalm 22" is never blocked.
+                // - First character ("p" -> "pp", "M" -> "Mm"): 450ms because no Bible query starts with
+                //   a doubled consonant/letter (except "Aaron", handled below) and the first keystroke
+                //   frame mounts the Clear button & initial filter.
+                // - Active multi-char soft-keyboard composing ("Mat" -> "Matt"): 70ms so fast two-thumb
+                //   typing of double letters on Gboard/Samsung Keyboard is never blocked.
+                // - Non-composing / hardware / bridge mid-word ("jo" -> "joo"): 160ms.
+                val effectiveWindowMs = when {
+                    insertedChar.isDigit() -> 60L
+                    oldText.length == 1 && !insertedChar.equals('a', ignoreCase = true) -> firstCharDuplicateWindowMs
+                    oldText.length >= 2 &&
+                        currentValue.composition != null &&
+                        incomingValue.composition != null -> 70L
+                    else -> duplicateWindowMs
+                }
+
                 val matchesRecentInsert = prevChar != null &&
                     insertedChar.equals(prevChar, ignoreCase = true) &&
-                    timeDelta in 0L..duplicateWindowMs
+                    timeDelta in 0L..effectiveWindowMs
 
                 val adjacentToSameChar =
                     (insertion.prefixLength > 0 &&
@@ -316,7 +345,7 @@ class SanctuaryInputDeduplicator(
                     sanitizedValue = createSyncedTextFieldValue(
                         text = rawNewText,
                         selection = incomingValue.selection,
-                        syncTick = syncCounter,
+                        syncTick = 0,
                         composition = incomingValue.composition
                     ),
                     wasDeduplicated = false
@@ -324,14 +353,14 @@ class SanctuaryInputDeduplicator(
             }
         }
 
-        // Bulk paste / multi-character test input (e.g. performTextInput("Matthew"))
+        // Bulk paste / swipe / suggestion chip / multi-character input (e.g. performTextInput("Matthew"))
         lastInsertedChar = rawNewText.lastOrNull()
         lastInsertTimestampMs = nowMs
         return DeduplicationResult(
             sanitizedValue = createSyncedTextFieldValue(
                 text = rawNewText,
                 selection = incomingValue.selection,
-                syncTick = syncCounter,
+                syncTick = 0,
                 composition = incomingValue.composition
             ),
             wasDeduplicated = false
@@ -397,23 +426,56 @@ fun collapseConsecutiveRepeats(input: String): String {
 }
 
 /**
- * Matches a search [query] against any of [fields], supporting both exact case-insensitive
- * substring matching and double-letter-collapsed matching so queries like `"Mathew"` or `"Matthew"`
- * both match `"Matthew"` smoothly on all Android devices.
+ * Matches a search [query] against any of [fields], supporting:
+ * 1. Exact case-insensitive substring matching.
+ * 2. Double-letter-collapsed matching so `"Mathew"` and `"Matthew"` both match `"Matthew"`.
+ * 3. Multi-word tokenized matching so queries like `"Psalm 23"`, `"Proverbs 3"`, `"Matthew 5"`,
+ *    or `"King David"` match across the combined fields smoothly on all Android devices.
  */
 fun matchesSanctuarySearch(query: String, vararg fields: String): Boolean {
     val trimmed = query.trim()
     if (trimmed.isEmpty()) return true
     val collapsedQuery = collapseConsecutiveRepeats(trimmed)
-    return fields.any { field ->
+    val directMatch = fields.any { field ->
         field.contains(trimmed, ignoreCase = true) ||
             (collapsedQuery.isNotEmpty() && collapseConsecutiveRepeats(field).contains(collapsedQuery))
     }
+    if (directMatch) return true
+
+    val tokens = trimmed.split(Regex("[\\s,:;.-]+")).filter { it.isNotBlank() }
+    if (tokens.size <= 1) return false
+
+    val nonNumericTokens = tokens.filter { token -> token.any { !it.isDigit() } }
+    if (nonNumericTokens.isEmpty()) return false
+
+    val combinedFields = fields.joinToString(" ")
+    val collapsedCombined = collapseConsecutiveRepeats(combinedFields)
+
+    val allTokensMatchCombined = tokens.all { token ->
+        val collapsedToken = collapseConsecutiveRepeats(token)
+        combinedFields.contains(token, ignoreCase = true) ||
+            (collapsedToken.isNotEmpty() && collapsedCombined.contains(collapsedToken))
+    }
+    if (allTokensMatchCombined) return true
+
+    // Also allow book + chapter queries like "Psalm 23" or "Matthew 5" to match a book item
+    // whose fields contain the book name ("Psalms", "Matthew") even if chapter numbers aren't in book fields
+    return nonNumericTokens.all { token ->
+        val collapsedToken = collapseConsecutiveRepeats(token)
+        combinedFields.contains(token, ignoreCase = true) ||
+            (collapsedToken.isNotEmpty() && collapsedCombined.contains(collapsedToken))
+    }
+}
+
+private class SyncedFieldStateHolder(initialValue: TextFieldValue) {
+    var currentValue: TextFieldValue = initialValue
+    val pendingDispatchedTexts: MutableList<String> = mutableListOf()
 }
 
 /**
- * Smooth, zero-lag search text field that eliminates double-letter typing across all Android
- * devices, soft keyboards, hardware keyboards, and browser-streamed emulators.
+ * Smooth, zero-lag search text field that eliminates double-letter typing and prevents dropped
+ * characters or broken IME composing sessions across all Android devices, soft keyboards,
+ * hardware keyboards, and browser-streamed emulators.
  */
 @Composable
 fun SanctuarySearchField(
@@ -425,58 +487,66 @@ fun SanctuarySearchField(
     val focusManager = LocalFocusManager.current
     val deduplicator = remember { SanctuaryInputDeduplicator() }
 
-    var textFieldValue by remember {
-        mutableStateOf(
-            value = createSyncedTextFieldValue(
-                text = query,
-                selection = TextRange(query.length),
-                syncTick = 0,
-                composition = null
-            ),
-            policy = neverEqualPolicy()
+    val initialFieldValue = remember {
+        createSyncedTextFieldValue(
+            text = query,
+            selection = TextRange(query.length),
+            syncTick = 0,
+            composition = null
         )
     }
+    var textFieldValue by remember { mutableStateOf(initialFieldValue) }
+    val stateHolder = remember { SyncedFieldStateHolder(initialFieldValue) }
 
-    var forceSyncTick by remember { mutableIntStateOf(0) }
-
+    // Only sync external `query` changes (e.g., external reset or filter action), NEVER overwrite
+    // in-flight user typing when `StateFlow` is simply catching up to `onQueryChange`.
     LaunchedEffect(query) {
-        if (query != textFieldValue.text) {
-            if (query.isEmpty()) {
-                deduplicator.reset()
-            }
-            val tick = deduplicator.nextSyncTick()
-            textFieldValue = createSyncedTextFieldValue(
-                text = query,
-                selection = TextRange(query.length),
-                syncTick = tick,
-                composition = null
-            )
-            forceSyncTick = tick
-        }
-    }
-
-    val handleValueChange: (TextFieldValue) -> Unit = remember(forceSyncTick) {
-        { incomingValue: TextFieldValue ->
-            val nowMs = SystemClock.uptimeMillis()
-            val result = deduplicator.processValueChange(
-                currentValue = textFieldValue,
-                incomingValue = incomingValue,
-                nowMs = nowMs
-            )
-            val previousText = textFieldValue.text
-            textFieldValue = result.sanitizedValue
-            if (result.wasDeduplicated) {
-                forceSyncTick = deduplicator.currentSyncTick()
-            }
-            if (result.sanitizedValue.text != previousText || result.sanitizedValue.text != query) {
-                onQueryChange(result.sanitizedValue.text)
+        val currentText = stateHolder.currentValue.text
+        if (query == currentText) {
+            stateHolder.pendingDispatchedTexts.clear()
+        } else {
+            val pendingIdx = stateHolder.pendingDispatchedTexts.indexOf(query)
+            if (pendingIdx >= 0) {
+                // `query` is an asynchronous StateFlow echo of text we already dispatched; remove
+                // it and any older echoes without touching the active TextFieldValue or IME session!
+                stateHolder.pendingDispatchedTexts.subList(0, pendingIdx + 1).clear()
+            } else {
+                // Genuine external mutation (e.g., external clear)
+                if (query.isEmpty()) {
+                    deduplicator.reset()
+                }
+                val synced = createSyncedTextFieldValue(
+                    text = query,
+                    selection = TextRange(query.length),
+                    syncTick = 0,
+                    composition = null
+                )
+                stateHolder.currentValue = synced
+                stateHolder.pendingDispatchedTexts.clear()
+                textFieldValue = synced
             }
         }
     }
 
     OutlinedTextField(
         value = textFieldValue,
-        onValueChange = handleValueChange,
+        onValueChange = { incomingValue: TextFieldValue ->
+            val nowMs = SystemClock.uptimeMillis()
+            val previousValue = stateHolder.currentValue
+            val result = deduplicator.processValueChange(
+                currentValue = previousValue,
+                incomingValue = incomingValue,
+                nowMs = nowMs
+            )
+            stateHolder.currentValue = result.sanitizedValue
+            textFieldValue = result.sanitizedValue
+
+            val newText = result.sanitizedValue.text
+            if (newText != previousValue.text) {
+                stateHolder.pendingDispatchedTexts.add(newText)
+                onQueryChange(newText)
+            }
+        },
         placeholder = { Text(placeholderText) },
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
@@ -486,14 +556,16 @@ fun SanctuarySearchField(
                 IconButton(
                     onClick = {
                         deduplicator.reset()
-                        val tick = deduplicator.nextSyncTick()
-                        textFieldValue = createSyncedTextFieldValue(
+                        val cleared = createSyncedTextFieldValue(
                             text = "",
                             selection = TextRange.Zero,
-                            syncTick = tick,
+                            syncTick = 0,
                             composition = null
                         )
-                        forceSyncTick = tick
+                        stateHolder.currentValue = cleared
+                        stateHolder.pendingDispatchedTexts.clear()
+                        stateHolder.pendingDispatchedTexts.add("")
+                        textFieldValue = cleared
                         onQueryChange("")
                     }
                 ) {
@@ -529,7 +601,7 @@ fun SanctuarySearchField(
 
 /**
  * Multi-line note input field using [SanctuaryInputDeduplicator] so typing study reflections
- * also works smoothly without duplicate letters on any Android device.
+ * also works smoothly without duplicate letters or dropped text on any Android device.
  */
 @Composable
 fun SanctuaryNoteField(
@@ -543,58 +615,61 @@ fun SanctuaryNoteField(
 ) {
     val deduplicator = remember { SanctuaryInputDeduplicator() }
 
-    var textFieldValue by remember {
-        mutableStateOf(
-            value = createSyncedTextFieldValue(
-                text = value,
-                selection = TextRange(value.length),
-                syncTick = 0,
-                composition = null
-            ),
-            policy = neverEqualPolicy()
+    val initialFieldValue = remember {
+        createSyncedTextFieldValue(
+            text = value,
+            selection = TextRange(value.length),
+            syncTick = 0,
+            composition = null
         )
     }
-
-    var forceSyncTick by remember { mutableIntStateOf(0) }
+    var textFieldValue by remember { mutableStateOf(initialFieldValue) }
+    val stateHolder = remember { SyncedFieldStateHolder(initialFieldValue) }
 
     LaunchedEffect(value) {
-        if (value != textFieldValue.text) {
-            if (value.isEmpty()) {
-                deduplicator.reset()
-            }
-            val tick = deduplicator.nextSyncTick()
-            textFieldValue = createSyncedTextFieldValue(
-                text = value,
-                selection = TextRange(value.length),
-                syncTick = tick,
-                composition = null
-            )
-            forceSyncTick = tick
-        }
-    }
-
-    val handleValueChange: (TextFieldValue) -> Unit = remember(forceSyncTick) {
-        { incomingValue: TextFieldValue ->
-            val nowMs = SystemClock.uptimeMillis()
-            val result = deduplicator.processValueChange(
-                currentValue = textFieldValue,
-                incomingValue = incomingValue,
-                nowMs = nowMs
-            )
-            val previousText = textFieldValue.text
-            textFieldValue = result.sanitizedValue
-            if (result.wasDeduplicated) {
-                forceSyncTick = deduplicator.currentSyncTick()
-            }
-            if (result.sanitizedValue.text != previousText || result.sanitizedValue.text != value) {
-                onValueChange(result.sanitizedValue.text)
+        val currentText = stateHolder.currentValue.text
+        if (value == currentText) {
+            stateHolder.pendingDispatchedTexts.clear()
+        } else {
+            val pendingIdx = stateHolder.pendingDispatchedTexts.indexOf(value)
+            if (pendingIdx >= 0) {
+                stateHolder.pendingDispatchedTexts.subList(0, pendingIdx + 1).clear()
+            } else {
+                if (value.isEmpty()) {
+                    deduplicator.reset()
+                }
+                val synced = createSyncedTextFieldValue(
+                    text = value,
+                    selection = TextRange(value.length),
+                    syncTick = 0,
+                    composition = null
+                )
+                stateHolder.currentValue = synced
+                stateHolder.pendingDispatchedTexts.clear()
+                textFieldValue = synced
             }
         }
     }
 
     OutlinedTextField(
         value = textFieldValue,
-        onValueChange = handleValueChange,
+        onValueChange = { incomingValue: TextFieldValue ->
+            val nowMs = SystemClock.uptimeMillis()
+            val previousValue = stateHolder.currentValue
+            val result = deduplicator.processValueChange(
+                currentValue = previousValue,
+                incomingValue = incomingValue,
+                nowMs = nowMs
+            )
+            stateHolder.currentValue = result.sanitizedValue
+            textFieldValue = result.sanitizedValue
+
+            val newText = result.sanitizedValue.text
+            if (newText != previousValue.text) {
+                stateHolder.pendingDispatchedTexts.add(newText)
+                onValueChange(newText)
+            }
+        },
         label = { Text(labelText) },
         placeholder = { Text(placeholderText) },
         keyboardOptions = KeyboardOptions(

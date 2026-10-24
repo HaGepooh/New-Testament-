@@ -241,7 +241,11 @@ fun SacredArtGalleryScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                if (gallerySection == GallerySectionMode.CHARACTERS_AND_DISCIPLES) {
+                val showCharacters =
+                    gallerySection == GallerySectionMode.CHARACTERS_AND_DISCIPLES &&
+                        (searchQuery.isBlank() || filteredCharacters.isNotEmpty() || filteredArtworks.isEmpty())
+
+                if (showCharacters) {
                     items(
                         items = filteredCharacters,
                         key = { "char_${it.id}" }

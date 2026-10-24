@@ -76,11 +76,13 @@ class ExampleRobolectricTest {
     }
 
     @Test
-    fun `search bar deduplicator prevents single keystroke from producing two letters across all pathways`() {
+    fun `search bar deduplicator prevents single keystroke from producing two letters and allows typing full text smoothly`() {
         val deduplicator = SanctuaryInputDeduplicator()
 
         // 1. First keystroke arriving as a batched 2-char duplicate ("" -> "jj") even after long idle time
         val initial = createSyncedTextFieldValue("", TextRange.Zero, syncTick = 0)
+        assertTrue(initial.annotatedString.getStringAnnotations(0, 0).isEmpty())
+
         val batchedFirst = deduplicator.processValueChange(
             currentValue = initial,
             incomingValue = TextFieldValue("jj", TextRange(2)),
@@ -92,11 +94,14 @@ class ExampleRobolectricTest {
         // 2. Second keystroke arriving as two sequential callbacks ("j" -> "jo", then phantom "jo" -> "joo")
         val afterO1 = deduplicator.processValueChange(
             currentValue = batchedFirst.sanitizedValue,
-            incomingValue = TextFieldValue("jo", TextRange(2)),
+            incomingValue = TextFieldValue("jo", TextRange(2), composition = TextRange(0, 2)),
             nowMs = 5250L
         )
         assertEquals("jo", afterO1.sanitizedValue.text)
         assertFalse(afterO1.wasDeduplicated)
+        // Normal keystrokes MUST have zero StringAnnotations and preserve IME composition so EditProcessor never calls restartInput()
+        assertTrue(afterO1.sanitizedValue.annotatedString.getStringAnnotations(0, 2).isEmpty())
+        assertEquals(TextRange(0, 2), afterO1.sanitizedValue.composition)
 
         val afterO2Phantom = deduplicator.processValueChange(
             currentValue = afterO1.sanitizedValue,
@@ -124,11 +129,11 @@ class ExampleRobolectricTest {
         assertEquals("ma", mmaStep.sanitizedValue.text)
         assertTrue(mmaStep.wasDeduplicated)
 
-        // 4. Hardware KeyDown followed by duplicate KeyDown or commitText
+        // 4. Hardware KeyDown followed by duplicate KeyDown within bounce window
         assertFalse(deduplicator.shouldConsumeKeyDown('h'.code, isDeleteKey = false, nowMs = 6700L))
         assertTrue(deduplicator.shouldConsumeKeyDown('h'.code, isDeleteKey = false, nowMs = 6740L))
 
-        // 5. Case-insensitive duplicate ("M" -> "Mm") collapsed to "M"
+        // 5. Case-insensitive first-letter duplicate ("M" -> "Mm") collapsed to "M"
         deduplicator.reset()
         val m1 = deduplicator.processValueChange(
             currentValue = initial,
@@ -143,9 +148,39 @@ class ExampleRobolectricTest {
         assertEquals("M", m2Phantom.sanitizedValue.text)
         assertTrue(m2Phantom.wasDeduplicated)
 
-        // 6. Double-letter-tolerant search matching
+        // 6. Full word typing with double letters & numbers ("Matthew 22", "Philippians", "Psalm 119") works without dropping any characters
+        for (phrase in listOf("Matthew 22", "Philippians", "Psalm 119", "Proverbs 31", "Thessalonians")) {
+            deduplicator.reset()
+            var current = createSyncedTextFieldValue("", TextRange.Zero, syncTick = 0)
+            var clock = 10_000L
+            val builder = StringBuilder()
+            for (ch in phrase) {
+                clock += 190L // Normal human typing speed (~190ms per key)
+                builder.append(ch)
+                val nextText = builder.toString()
+                assertFalse(deduplicator.shouldConsumeKeyDown(ch.code, isDeleteKey = false, nowMs = clock))
+                val step = deduplicator.processValueChange(
+                    currentValue = current,
+                    incomingValue = TextFieldValue(
+                        text = nextText,
+                        selection = TextRange(nextText.length),
+                        composition = TextRange(0, nextText.length)
+                    ),
+                    nowMs = clock
+                )
+                assertFalse("Expected normal keystroke for '$ch' in '$phrase'", step.wasDeduplicated)
+                assertEquals(nextText, step.sanitizedValue.text)
+                assertTrue(step.sanitizedValue.annotatedString.getStringAnnotations(0, nextText.length).isEmpty())
+                current = step.sanitizedValue
+            }
+            assertEquals(phrase, current.text)
+        }
+
+        // 7. Double-letter-tolerant and multi-word tokenized search matching
         assertTrue(matchesSanctuarySearch("Mathew", "Matthew"))
         assertTrue(matchesSanctuarySearch("Matthew", "Matthew"))
         assertTrue(matchesSanctuarySearch("Philipians", "Philippians"))
+        assertTrue(matchesSanctuarySearch("Psalm 23", "Psalms 23"))
+        assertTrue(matchesSanctuarySearch("Matthew 5", "Matthew", "Gospel"))
     }
 }
