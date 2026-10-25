@@ -268,7 +268,7 @@ fun ReaderSettingsSheet(
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "Illuminate words spoken by Jesus in Cana Ruby",
+                        text = "Illuminate words spoken by Jesus in radiant Pure White",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

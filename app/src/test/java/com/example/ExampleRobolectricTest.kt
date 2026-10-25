@@ -46,6 +46,11 @@ class ExampleRobolectricTest {
         assertEquals(24, allOilPlates.size)
         assertEquals(24, allOilPlates.map { it.drawableResId }.toSet().size)
 
+        // Verify Bible verse colors (including Words of Christ and Nocturne Ink) are pure white instead of pink
+        assertEquals(androidx.compose.ui.graphics.Color.White, com.example.ui.theme.WordsOfChristDark)
+        assertEquals(androidx.compose.ui.graphics.Color.White, com.example.ui.theme.WordsOfChristLight)
+        assertEquals(androidx.compose.ui.graphics.Color.White, com.example.ui.theme.NocturneInk)
+
         // Verify Psalms (150 chapters) and Proverbs (31 chapters) have offline verses, 6 3D chapter slides, and 3D verse variations
         for ((bookId, chNum) in listOf("MAT" to 5, "JHN" to 4, "ACT" to 2, "PSA" to 23, "PSA" to 150, "PRO" to 3, "PRO" to 31)) {
             val chMeta = ChapterArtRegistry.getChapterMetadata(bookId, chNum)

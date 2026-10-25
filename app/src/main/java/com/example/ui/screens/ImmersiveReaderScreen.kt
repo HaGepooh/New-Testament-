@@ -141,11 +141,7 @@ fun ImmersiveReaderScreen(
         listState.scrollToItem(0)
     }
 
-    val christWordsColor = if (uiState.sanctuaryTheme == ReadingSanctuaryTheme.NOCTURNE) {
-        WordsOfChristDark
-    } else {
-        WordsOfChristLight
-    }
+    val christWordsColor = Color.White
 
     val activeSlide = chapter3DSlides.getOrElse(selectedChapterSlideIndex) { chapter3DSlides.first() }
 
@@ -1102,15 +1098,15 @@ private fun VerseRowItem(
     }
 
     val backgroundColor = when {
-        isCurrentlySpoken -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.65f)
-        highlightColor != null -> highlightColor.tintBackground
-        else -> MaterialTheme.colorScheme.surface.copy(alpha = 0.56f)
+        isCurrentlySpoken -> Color(0xFF281F42)
+        highlightColor != null -> Color(0xFF1D1830)
+        else -> Color(0xFF141122)
     }
 
     val textColor = if (isRedLetterEnabled && verse.isWordsOfChrist) {
         christWordsColor
     } else {
-        MaterialTheme.colorScheme.onBackground
+        Color.White
     }
 
     Column(
@@ -1249,6 +1245,7 @@ private fun VerseRowItem(
                                     Text(
                                         text = "${varSpec.primaryCharacter.name.substringBefore(" ")} & ${varSpec.secondaryCharacter?.name?.substringBefore(" ") ?: ""}",
                                         style = MaterialTheme.typography.labelSmall,
+                                        color = Color.White.copy(alpha = 0.9f),
                                         fontSize = 9.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -1484,7 +1481,7 @@ private fun VerseRowItem(
                             },
                             style = MaterialTheme.typography.labelMedium,
                             fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = Color.White.copy(alpha = 0.85f)
                         )
                     }
                 }
@@ -1504,8 +1501,8 @@ private fun FlowingCodexParagraphView(
     savedVersesForChapter: Map<Int, SavedVerseEntity>,
     onVerseClick: (VerseItem) -> Unit
 ) {
-    val defaultInk = MaterialTheme.colorScheme.onBackground
-    val numColor = MaterialTheme.colorScheme.primary
+    val defaultInk = Color.White
+    val numColor = metadata.palette.goldLeaf
 
     val paragraphText = buildAnnotatedString {
         verses.forEachIndexed { idx, v ->
@@ -1586,9 +1583,9 @@ private fun FlowingCodexParagraphView(
         Card(
             shape = RoundedCornerShape(18.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
+                containerColor = Color(0xFF141122)
             ),
-            border = BorderStroke(1.dp, metadata.palette.goldLeaf.copy(alpha = 0.35f)),
+            border = BorderStroke(1.dp, metadata.palette.goldLeaf.copy(alpha = 0.45f)),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -1596,6 +1593,7 @@ private fun FlowingCodexParagraphView(
         ) {
             Text(
                 text = paragraphText,
+                color = Color.White,
                 lineHeight = (fontSizeSp * lineSpacingMultiplier).sp,
                 modifier = Modifier.padding(18.dp)
             )

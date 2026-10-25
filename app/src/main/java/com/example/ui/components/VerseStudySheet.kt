@@ -255,12 +255,13 @@ fun VerseStudySheet(
 
             Surface(
                 shape = RoundedCornerShape(14.dp),
-                color = selectedColor.tintBackground,
-                border = BorderStroke(1.dp, selectedColor.swatchColor.copy(alpha = 0.45f)),
+                color = Color(0xFF141122),
+                border = BorderStroke(1.dp, selectedColor.swatchColor.copy(alpha = 0.65f)),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = "“${verse.text}”",
+                    color = Color.White,
                     style = MaterialTheme.typography.bodyLarge,
                     fontStyle = FontStyle.Italic,
                     modifier = Modifier.padding(16.dp)

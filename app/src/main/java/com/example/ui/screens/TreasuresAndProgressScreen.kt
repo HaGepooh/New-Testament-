@@ -377,11 +377,13 @@ fun TreasuresAndProgressScreen(
 
                             Surface(
                                 shape = RoundedCornerShape(12.dp),
-                                color = colorEnum.tintBackground,
+                                color = Color(0xFF141122),
+                                border = BorderStroke(1.dp, colorEnum.swatchColor.copy(alpha = 0.55f)),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
                                     text = "“${saved.verseText}”",
+                                    color = Color.White,
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontStyle = FontStyle.Italic,
                                     modifier = Modifier.padding(14.dp)
