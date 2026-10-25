@@ -33,7 +33,7 @@ import kotlin.math.sin
 fun CharacterPortraitCanvas(
     character: BiblicalCharacter,
     modifier: Modifier = Modifier,
-    animateHalo: Boolean = true,
+    animateHalo: Boolean = false,
     showArchFrame: Boolean = true
 ) {
     val activePulse = if (animateHalo) {
@@ -53,9 +53,7 @@ fun CharacterPortraitCanvas(
     }
 
     Canvas(
-        modifier = modifier.graphicsLayer {
-            compositingStrategy = CompositingStrategy.Offscreen
-        }
+        modifier = modifier
     ) {
         clipRect {
             val w = size.width

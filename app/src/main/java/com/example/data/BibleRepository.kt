@@ -31,15 +31,17 @@ class BibleRepository(
         translation: BibleTranslation
     ): ChapterContent = withContext(Dispatchers.IO) {
         val book = NewTestamentBooks.getBookById(bookId)
-        val metadata = ChapterArtRegistry.getChapterMetadata(bookId, chapterNumber)
-        val cacheKey = "${bookId}_${chapterNumber}_${translation.code}"
+        val validChapter = chapterNumber.coerceIn(1, book.chapterCount)
+        val metadata = ChapterArtRegistry.getChapterMetadata(book.id, validChapter)
+        val expectedVerseCount = OfflineScriptureProvider.getExpectedVerseCount(book.id, validChapter)
+        val cacheKey = "v3_complete_${book.id}_${validChapter}_${translation.code}"
 
-        // 1. Check local Room database cache first
+        // 1. Check local Room database cache first (validating full canonical verse count)
         runCatching {
             val cached = bibleDao.getCachedChapter(cacheKey)
             if (cached != null) {
-                val decoded = deserializeVerses(bookId, chapterNumber, cached.versesPayload)
-                if (decoded.isNotEmpty()) {
+                val decoded = deserializeVerses(book.id, validChapter, cached.versesPayload)
+                if (decoded.size >= expectedVerseCount && decoded.isNotEmpty()) {
                     return@withContext ChapterContent(
                         metadata = metadata,
                         bookInfo = book,
@@ -51,15 +53,15 @@ class BibleRepository(
             }
         }
 
-        // 2. Bundled Offline Scripture (instantaneous across all 441 chapters)
-        val offlineVerses = OfflineScriptureProvider.getOfflineVerses(bookId, chapterNumber, translation)
+        // 2. Bundled Offline Scripture (100% complete canonical verses 1..N across all 441 chapters)
+        val offlineVerses = OfflineScriptureProvider.getOfflineVerses(book.id, validChapter, translation)
         runCatching {
             if (offlineVerses.isNotEmpty()) {
                 bibleDao.insertCachedChapter(
                     CachedChapterEntity(
                         cacheKey = cacheKey,
-                        bookId = bookId,
-                        chapterNumber = chapterNumber,
+                        bookId = book.id,
+                        chapterNumber = validChapter,
                         translationCode = translation.code,
                         versesPayload = serializeVerses(offlineVerses)
                     )

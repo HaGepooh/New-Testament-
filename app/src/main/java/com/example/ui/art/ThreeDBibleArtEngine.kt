@@ -466,20 +466,27 @@ object ThreeDBibleArtEngine {
         val bookHash = abs(verse.bookId.hashCode())
         val verseUniqueStride = (bookHash + verse.chapterNumber * 13 + verse.verseNumber * 5) % totalChars
 
+        val prevVerseStride = (bookHash + verse.chapterNumber * 13 + (verse.verseNumber - 1).coerceAtLeast(0) * 5) % totalChars
+        val nextVerseStride = (bookHash + verse.chapterNumber * 13 + (verse.verseNumber + 1) * 5) % totalChars
+
         // Determine Variation 0's characters:
-        // If the verse text explicitly names a character/story, honor it for Variation 0 unless it would
-        // repeat the previous verse's exact pair; we mix in verse.verseNumber to guarantee every verse is distinct!
+        // Honor matchedPrimaryChar on odd verses when it doesn't collide with adjacent even verses' stride characters
         val hasExplicitKeyword = hasExplicitStoryKeyword(verse.text)
-        val char1 = if (hasExplicitKeyword && verse.verseNumber % 2 == 1) {
+        val canUseMatchedPrimary = hasExplicitKeyword &&
+            verse.verseNumber % 2 == 1 &&
+            matchedPrimaryChar.id != allChars[prevVerseStride].id &&
+            matchedPrimaryChar.id != allChars[nextVerseStride].id
+
+        val char1 = if (canUseMatchedPrimary) {
             matchedPrimaryChar
         } else {
             allChars[verseUniqueStride % totalChars]
         }
 
-        val char2Candidate = if (hasExplicitKeyword && matchedSecondaryChar != null && matchedSecondaryChar.id != char1.id) {
+        val char2Candidate = if (canUseMatchedPrimary && matchedSecondaryChar != null && matchedSecondaryChar.id != char1.id) {
             matchedSecondaryChar
         } else {
-            allChars[(verseUniqueStride + 7) % totalChars]
+            allChars[(verseUniqueStride + 7 + (verse.verseNumber % 5)) % totalChars]
         }
         val char2 = if (char2Candidate.id != char1.id) char2Candidate else allChars[(verseUniqueStride + 1) % totalChars]
 
@@ -702,9 +709,6 @@ fun ThreeDVerseIllustration(
 ) {
     Box(
         modifier = modifier
-            .graphicsLayer {
-                compositingStrategy = CompositingStrategy.Offscreen
-            }
             .drawWithCache {
                 val w = size.width
                 val h = size.height
@@ -902,9 +906,6 @@ fun ThreeDChapterCarouselScene(
 
     Box(
         modifier = modifier
-            .graphicsLayer {
-                compositingStrategy = CompositingStrategy.Offscreen
-            }
             .drawWithCache {
                 val _key = rememberSlideKey
                 val w = size.width

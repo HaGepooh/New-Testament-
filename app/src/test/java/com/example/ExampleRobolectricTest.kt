@@ -183,4 +183,49 @@ class ExampleRobolectricTest {
         assertTrue(matchesSanctuarySearch("Psalm 23", "Psalms 23"))
         assertTrue(matchesSanctuarySearch("Matthew 5", "Matthew", "Gospel"))
     }
+
+    @Test
+    fun `all 441 chapters across New Testament, Psalms, and Proverbs contain 100 percent of their complete canonical verses`() {
+        var totalChaptersChecked = 0
+        var totalVersesChecked = 0
+
+        for (book in NewTestamentBooks.allBooks) {
+            for (ch in 1..book.chapterCount) {
+                totalChaptersChecked++
+                val expectedCount = OfflineScriptureProvider.getExpectedVerseCount(book.id, ch)
+                assertTrue("Expected > 0 verses for ${book.id} $ch", expectedCount > 0)
+
+                val webVerses = OfflineScriptureProvider.getOfflineVerses(book.id, ch, BibleTranslation.WEB)
+                val kjvVerses = OfflineScriptureProvider.getOfflineVerses(book.id, ch, BibleTranslation.KJV)
+
+                assertEquals("Verse count mismatch in WEB for ${book.id} $ch", expectedCount, webVerses.size)
+                assertEquals("Verse count mismatch in KJV for ${book.id} $ch", expectedCount, kjvVerses.size)
+
+                // Verify contiguous 1..N verse numbering with zero skipped verses
+                val expectedNumbers = (1..expectedCount).toList()
+                assertEquals("Skipped verse numbers in ${book.id} $ch", expectedNumbers, webVerses.map { it.verseNumber })
+                assertEquals("Skipped verse numbers in KJV ${book.id} $ch", expectedNumbers, kjvVerses.map { it.verseNumber })
+
+                // Verify no verse text is empty
+                assertTrue("Blank WEB verse in ${book.id} $ch", webVerses.all { it.text.isNotBlank() })
+                assertTrue("Blank KJV verse in ${book.id} $ch", kjvVerses.all { it.text.isNotBlank() })
+
+                totalVersesChecked += webVerses.size
+            }
+        }
+
+        // Spot-check canonical chapter lengths that were previously incomplete
+        assertEquals(25, OfflineScriptureProvider.getOfflineVerses("MAT", 1, BibleTranslation.KJV).size)
+        assertEquals(23, OfflineScriptureProvider.getOfflineVerses("MAT", 2, BibleTranslation.KJV).size)
+        assertEquals(48, OfflineScriptureProvider.getOfflineVerses("MAT", 5, BibleTranslation.KJV).size)
+        assertEquals(75, OfflineScriptureProvider.getOfflineVerses("MAT", 26, BibleTranslation.KJV).size)
+        assertEquals(80, OfflineScriptureProvider.getOfflineVerses("LUK", 1, BibleTranslation.KJV).size)
+        assertEquals(51, OfflineScriptureProvider.getOfflineVerses("JHN", 1, BibleTranslation.KJV).size)
+        assertEquals(176, OfflineScriptureProvider.getOfflineVerses("PSA", 119, BibleTranslation.KJV).size)
+        assertEquals(31, OfflineScriptureProvider.getOfflineVerses("PRO", 31, BibleTranslation.KJV).size)
+
+        assertEquals(441, totalChaptersChecked)
+        assertEquals(11333, totalVersesChecked)
+    }
 }
+

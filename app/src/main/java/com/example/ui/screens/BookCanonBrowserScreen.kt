@@ -80,12 +80,17 @@ fun BookCanonBrowserScreen(
     val filteredBooks = remember(selectedCategory, searchQuery) {
         NewTestamentBooks.allBooks.filter { book ->
             val matchesCat = selectedCategory == null || book.category == selectedCategory
+            val chapterNums = (1..book.chapterCount).joinToString(" ")
             val matchesSearch = com.example.ui.components.matchesSanctuarySearch(
                 searchQuery,
                 book.name,
+                book.shortName,
+                book.id,
                 book.summary,
                 book.author,
-                book.greekTitle
+                book.greekTitle,
+                "${book.chapterCount} chapters",
+                chapterNums
             )
             matchesCat && matchesSearch
         }
@@ -449,13 +454,16 @@ private fun BookCanonCard(
                                             }
                                         }
 
+                                        val verseCount = remember(book.id, chNum) {
+                                            com.example.data.OfflineScriptureProvider.getExpectedVerseCount(book.id, chNum)
+                                        }
                                         Column(modifier = Modifier.weight(1f)) {
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically,
                                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
                                             ) {
                                                 Text(
-                                                    text = "Chapter $chNum",
+                                                    text = "Ch $chNum • $verseCount Verses",
                                                     style = MaterialTheme.typography.labelMedium,
                                                     color = MaterialTheme.colorScheme.primary,
                                                     fontWeight = FontWeight.Bold

@@ -37,7 +37,7 @@ fun SacredArtCanvas(
     metadata: ChapterArtMetadata,
     artStyleMode: ArtStyleMode,
     modifier: Modifier = Modifier,
-    animateShimmer: Boolean = true,
+    animateShimmer: Boolean = false,
     showOrnamentalFrame: Boolean = true
 ) {
     val pulse = if (animateShimmer) {
@@ -57,9 +57,7 @@ fun SacredArtCanvas(
     }
 
     Canvas(
-        modifier = modifier.graphicsLayer {
-            compositingStrategy = CompositingStrategy.Offscreen
-        }
+        modifier = modifier
     ) {
         clipRect {
             val w = size.width

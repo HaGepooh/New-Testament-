@@ -178,7 +178,7 @@ fun ImmersiveReaderScreen(
                                 metadata = metadata,
                                 artStyleMode = uiState.artStyleMode,
                                 modifier = Modifier.fillMaxSize(),
-                                animateShimmer = true,
+                                animateShimmer = false,
                                 showOrnamentalFrame = true
                             )
                         } else {
@@ -232,7 +232,7 @@ fun ImmersiveReaderScreen(
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = "• ${uiState.translation.badge}",
+                                        text = "• ${verses.size}v • ${uiState.translation.badge}",
                                         style = MaterialTheme.typography.labelSmall,
                                         color = metadata.palette.goldLeaf
                                     )
@@ -875,13 +875,13 @@ fun ImmersiveReaderScreen(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "3D Multi-Character Verse Pictures (${verses.size * 3} Unique 3D Scenes)",
+                                text = "${verses.size} Complete Verses • ${verses.size * 3} Unique 3D Scenes",
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "3 distinct 3D Bible character pictures for every verse • Tap Scene A/B/C to switch",
+                                text = "All verses 1–${verses.size} of ${book.name} ${metadata.chapterNumber} with 3 distinct 3D Bible character pictures per verse",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
