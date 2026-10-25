@@ -41,13 +41,24 @@ class ExampleRobolectricTest {
         // Verify all 34 biblical characters & disciples portraits (including King David, Asaph, King Solomon, Lady Wisdom)
         assertEquals(34, BiblicalCharactersCatalog.allCharacters.size)
 
+        // Verify all 24 classical European oil painting masterwork plates have distinct drawable resources
+        val allOilPlates = com.example.ui.art.BiblicalOilPaintingPlate.entries
+        assertEquals(24, allOilPlates.size)
+        assertEquals(24, allOilPlates.map { it.drawableResId }.toSet().size)
+
         // Verify Psalms (150 chapters) and Proverbs (31 chapters) have offline verses, 6 3D chapter slides, and 3D verse variations
-        for ((bookId, chNum) in listOf("MAT" to 5, "PSA" to 23, "PSA" to 150, "PRO" to 3, "PRO" to 31)) {
+        for ((bookId, chNum) in listOf("MAT" to 5, "JHN" to 4, "ACT" to 2, "PSA" to 23, "PSA" to 150, "PRO" to 3, "PRO" to 31)) {
             val chMeta = ChapterArtRegistry.getChapterMetadata(bookId, chNum)
             val slides = ThreeDBibleArtEngine.getChapter3DSlides(chMeta)
             assertEquals(6, slides.size)
             val slideLeadIds = slides.map { it.leadCharacter.id }.toSet()
             assertEquals(6, slideLeadIds.size)
+
+            // Verify all 6 chapter slides use 6 completely different oil paintings!
+            val slideOilPlates = (0..5).map { slideIdx ->
+                com.example.ui.art.resolveChapterOilPaintingSpec(bookId, chNum, slideIdx).plate
+            }.toSet()
+            assertEquals(6, slideOilPlates.size)
 
             val verses = OfflineScriptureProvider.getOfflineVerses(bookId, chNum, BibleTranslation.KJV)
             assertTrue(verses.isNotEmpty())
@@ -56,19 +67,30 @@ class ExampleRobolectricTest {
                 val variations = ThreeDBibleArtEngine.getVerse3DPictureVariations(verse, chMeta)
                 assertEquals(3, variations.size)
 
+                // Verify all 3 variations of this verse use 3 completely different oil paintings!
+                val verseOilPlates = variations.map {
+                    com.example.ui.art.resolveVerseOilPaintingSpec(it).plate
+                }
+                assertEquals(3, verseOilPlates.toSet().size)
+
                 // Verify all 6 characters across the 3 variations of this verse are completely distinct
                 val charIdsInVerse = variations.flatMap {
                     listOfNotNull(it.primaryCharacter.id, it.secondaryCharacter?.id)
                 }
                 assertEquals(6, charIdsInVerse.toSet().size)
 
-                // Verify consecutive verses never have the same primary character & secondary character pair
+                // Verify consecutive verses never show the same primary oil painting OR character pair
                 if (idx > 0) {
                     val prevSpec = ThreeDBibleArtEngine.resolveVerse3DPicture(verses[idx - 1], chMeta)
                     val currSpec = variations.first()
                     assertNotEquals(
                         "${prevSpec.primaryCharacter.id}_${prevSpec.secondaryCharacter?.id}",
                         "${currSpec.primaryCharacter.id}_${currSpec.secondaryCharacter?.id}"
+                    )
+                    assertNotEquals(
+                        "Consecutive verses ${idx} and ${idx + 1} in $bookId $chNum must not share the same oil painting",
+                        com.example.ui.art.resolveVerseOilPaintingSpec(prevSpec).plate,
+                        com.example.ui.art.resolveVerseOilPaintingSpec(currSpec).plate
                     )
                 }
             }
